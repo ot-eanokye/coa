@@ -1,0 +1,132 @@
+<section class="page">
+  <div class="page__head">
+    <div>
+      <h1 class="page__title">CoA Results Entry Form</h1>
+      <p class="page__meta">
+        @if (batch(); as b) {
+          Batch NO: {{ b.batch_no }} | Product: {{ b.product_name }} | Category: {{ b.category }}
+        }
+      </p>
+    </div>
+
+    <div class="stepper">
+      <div class="step">
+        <span class="step__circle step__circle--done">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </span>
+        <span class="step__label step__label--done">INITIALIZATION</span>
+      </div>
+      <span class="step__line"></span>
+      <div class="step">
+        <span class="step__circle step__circle--active">2</span>
+        <span class="step__label step__label--active">RESULTS ENTRY</span>
+      </div>
+      <span class="step__line"></span>
+      <div class="step">
+        <span class="step__circle">3</span>
+        <span class="step__label">REVIEW</span>
+      </div>
+    </div>
+  </div>
+
+  @if (error()) {
+    <div class="banner banner--error">{{ error() }}</div>
+  }
+
+  <!-- Timeline -->
+  <div class="section-title">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 16 14" />
+    </svg>
+    <h2>Analysis Timeline</h2>
+  </div>
+
+  <div class="timeline">
+    <label class="date-field">
+      <span class="date-field__label">DATE ANALYSIS STARTED</span>
+      <div class="date-input">
+        <input type="date" name="started" [ngModel]="startedDate()" (ngModelChange)="startedDate.set($event)" />
+      </div>
+    </label>
+    <label class="date-field">
+      <span class="date-field__label">DATE ANALYSIS COMPLETED</span>
+      <div class="date-input">
+        <input type="date" name="completed" [ngModel]="completedDate()"
+          (ngModelChange)="completedDate.set($event)" />
+      </div>
+    </label>
+  </div>
+
+  <!-- Test results -->
+  <div class="card">
+    <div class="section-title section-title--pad">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 3h6v2l-1 1v4l5 8a2 2 0 0 1-1.7 3H6.7A2 2 0 0 1 5 18l5-8V6L9 5Z" />
+        <line x1="8.5" y1="14" x2="15.5" y2="14" />
+      </svg>
+      <h2>Test Results</h2>
+    </div>
+
+    <table class="rtable">
+      <thead>
+        <tr>
+          <th class="col-no">#</th>
+          <th>TEST NAME</th>
+          <th>SPECIFICATION</th>
+          <th class="col-result">RESULT</th>
+          <th class="col-status">STATUS</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of rows(); track row.id; let i = $index) {
+          <tr>
+            <td class="col-no">{{ i + 1 < 10 ? '0' + (i + 1) : i + 1 }}</td>
+            <td class="strong">{{ row.parameter }}</td>
+            <td class="spec">{{ row.specification }}</td>
+            <td class="col-result">
+              <div class="result-input">
+                <input type="text" [ngModel]="row.result_value" [name]="'res' + i"
+                  (ngModelChange)="setValue(row.id, $event)" placeholder="Enter result" />
+              </div>
+            </td>
+            <td class="col-status">
+              <button type="button" class="status-badge"
+                [class.status-badge--pass]="row.status === 'pass'"
+                [class.status-badge--fail]="row.status === 'fail'"
+                [class.status-badge--pending]="row.status === 'pending'"
+                (click)="cycleStatus(row.id)">{{ row.status | uppercase }}</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="rtable-empty">
+              {{ loading() ? 'Loading…' : 'This batch has no test parameters.' }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <p class="hint-line">Tap a status badge to cycle Pending → Pass → Fail.</p>
+
+  <!-- Finalize -->
+  <div class="finalize">
+    <div class="finalize__text">
+      <span class="finalize__title">Finalize Entry</span>
+      <span class="finalize__hint">Please ensure all test results are verified before submission.</span>
+    </div>
+    <button class="btn btn--green" type="button" (click)="submit()" [disabled]="saving()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <polygon points="6 4 20 12 6 20 6 4" />
+      </svg>
+      {{ saving() ? 'Saving…' : 'Submit for Review' }}
+    </button>
+  </div>
+</section>

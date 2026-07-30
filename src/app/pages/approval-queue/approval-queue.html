@@ -1,0 +1,145 @@
+<section class="page">
+  <h1 class="page__title">Approval Queue</h1>
+  <p class="page__subtitle">Manage approved batch reports and dispatch to production.</p>
+
+  <!-- Filters -->
+  <div class="filters">
+    <div class="filters__field filters__field--grow">
+      <span class="filters__label">SEARCH BATCH OR PRODUCT</span>
+      <div class="input-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input type="text" placeholder="e.g. B2024-882 or Paracetamol" />
+      </div>
+    </div>
+    <div class="filters__field">
+      <span class="filters__label">CATEGORY</span>
+      <div class="select">
+        <select>
+          <option>All Categories</option>
+          <option>Syrup</option>
+          <option>Tablet</option>
+          <option>Capsule</option>
+        </select>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </div>
+    </div>
+    <button class="btn btn--blue" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="4" y1="6" x2="20" y2="6" />
+        <line x1="7" y1="12" x2="17" y2="12" />
+        <line x1="10" y1="18" x2="14" y2="18" />
+      </svg>
+      APPLY FILTERS
+    </button>
+  </div>
+
+  <!-- Table -->
+  <div class="panel">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>BATCH ID.</th>
+          <th>PRODUCT NAME</th>
+          <th>CATEGORY</th>
+          <th>APPROVAL DATE</th>
+          <th>STATUS</th>
+          <th class="th-actions">ACTIONS</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of approvals; track row.batchId) {
+          <tr>
+            <td class="cell-mono">{{ row.batchId }}</td>
+            <td class="cell-strong">{{ row.product }}</td>
+            <td>{{ row.category }}</td>
+            <td class="cell-mono cell-muted">{{ row.approvalDate }}</td>
+            <td>
+              <span class="badge">READY FOR DISPATCH</span>
+            </td>
+            <td class="td-actions">
+              <button class="dispatch" type="button">DISPATCH TO PRODUCTION</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <div class="panel__foot">
+      <span class="panel__count">Showing 4 of 28 pending approvals</span>
+      <div class="pager">
+        <button class="pager__btn" aria-label="Previous" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+        <button class="pager__btn" aria-label="Next" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage cards -->
+  <div class="stages">
+    @for (stage of stages; track stage.title) {
+      <div class="stage-card">
+        <div class="stage-card__head">
+          <span class="stage-card__icon">
+            @switch (stage.icon) {
+              @case ('shield') {
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
+                  <path d="m9 12 2 2 4-4" />
+                </svg>
+              }
+              @case ('check') {
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="m8 12 3 3 5-6" />
+                </svg>
+              }
+              @case ('clipboard') {
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                  <rect x="8" y="2" width="8" height="4" rx="1" />
+                  <path d="m9 14 2 2 4-4" />
+                </svg>
+              }
+              @case ('truck') {
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 3h15v13H1z" />
+                  <path d="M16 8h4l3 3v5h-7V8Z" />
+                  <circle cx="5.5" cy="18.5" r="2.5" />
+                  <circle cx="18.5" cy="18.5" r="2.5" />
+                </svg>
+              }
+            }
+          </span>
+          <h3 class="stage-card__title">{{ stage.title }}</h3>
+        </div>
+        <div class="stage-card__status">
+          <span class="stage-card__label">{{ stage.label }}</span>
+          <span class="stage-card__value" [class.is-green]="stage.valueTone === 'green'"
+            [class.is-blue]="stage.valueTone === 'blue'">{{ stage.value }}</span>
+        </div>
+        <p class="stage-card__note">{{ stage.note }}</p>
+      </div>
+    }
+  </div>
+</section>

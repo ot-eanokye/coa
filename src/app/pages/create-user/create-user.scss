@@ -1,0 +1,242 @@
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 44px 60px 60px;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.breadcrumb__muted {
+  color: var(--color-muted);
+}
+
+.breadcrumb__muted:hover {
+  color: var(--color-text);
+}
+
+.breadcrumb__sep {
+  color: var(--color-faint);
+}
+
+.breadcrumb__current {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.page__title {
+  margin: 0 0 10px;
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.page__subtitle {
+  margin: 0 0 30px;
+  color: var(--color-muted);
+  font-size: 15px;
+  max-width: 620px;
+  line-height: 1.5;
+}
+
+.card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  overflow: hidden;
+}
+
+.card__head {
+  padding: 22px 30px;
+  background: var(--color-bg-subtle);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.card__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.card__body {
+  padding: 30px;
+}
+
+.banner {
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  font-size: 14px;
+  margin-bottom: 22px;
+}
+
+.banner--error {
+  background: var(--color-red-soft);
+  color: #b42318;
+  border: 1px solid #f3c6c6;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px 26px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.field--full {
+  grid-column: 1 / -1;
+}
+
+.field__label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.7px;
+  color: var(--color-muted);
+}
+
+.field input {
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  padding: 13px 15px;
+  font-size: 15px;
+  color: var(--color-text);
+  background: var(--color-white);
+}
+
+.field input::placeholder {
+  color: var(--color-faint);
+}
+
+.field input:focus {
+  outline: none;
+  border-color: var(--color-blue);
+}
+
+.select {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.select select {
+  appearance: none;
+  width: 100%;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  padding: 13px 40px 13px 15px;
+  font-size: 15px;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.select svg {
+  position: absolute;
+  right: 14px;
+  color: #4b5563;
+  pointer-events: none;
+}
+
+.pw {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  padding: 0 8px 0 15px;
+  background: var(--color-white);
+}
+
+.pw:focus-within {
+  border-color: var(--color-blue);
+}
+
+.pw input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 13px 0;
+  font-size: 15px;
+  background: transparent;
+}
+
+.pw__toggle {
+  background: transparent;
+  border: none;
+  color: #6b7280;
+  display: inline-flex;
+  padding: 6px;
+}
+
+.pw__gen {
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-blue);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  margin-left: 6px;
+}
+
+.pw__gen:hover {
+  background: var(--color-blue-soft);
+}
+
+.card__foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+  padding: 20px 30px;
+  border-top: 1px solid var(--color-border);
+}
+
+.btn {
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 13px 24px;
+  border: 1px solid transparent;
+}
+
+.btn--ghost {
+  background: var(--color-white);
+  color: #374151;
+  border-color: var(--color-border-strong);
+}
+
+.btn--ghost:hover {
+  background: var(--color-bg-subtle);
+}
+
+.btn--primary {
+  background: var(--color-black);
+  color: var(--color-white);
+}
+
+.btn--primary:hover {
+  background: #1c1c1c;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+@media (max-width: 760px) {
+  .page {
+    padding: 32px 20px 48px;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

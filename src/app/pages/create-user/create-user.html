@@ -1,0 +1,93 @@
+<section class="page">
+  <nav class="breadcrumb">
+    <a class="breadcrumb__muted" routerLink="/users">User Management</a>
+    <span class="breadcrumb__sep">&rsaquo;</span>
+    <span class="breadcrumb__current">Create New User</span>
+  </nav>
+
+  <h1 class="page__title">Create New User</h1>
+  <p class="page__subtitle">Provision institutional access and assign a clinical role. The user signs in with the
+    temporary password you set here.</p>
+
+  <form class="card" (ngSubmit)="onSubmit()">
+    <div class="card__head">
+      <h2 class="card__title">Account Details</h2>
+    </div>
+
+    <div class="card__body">
+      @if (error()) {
+        <div class="banner banner--error" role="alert">{{ error() }}</div>
+      }
+
+      <div class="grid">
+        <label class="field">
+          <span class="field__label">FULL NAME</span>
+          <input type="text" placeholder="e.g. Dr. Kwesi Appiah" name="fullName"
+            [ngModel]="fullName()" (ngModelChange)="fullName.set($event)" />
+        </label>
+        <label class="field">
+          <span class="field__label">EMPLOYEE ID</span>
+          <input type="text" placeholder="e.g. EC-QC-0842" name="employeeId"
+            [ngModel]="employeeId()" (ngModelChange)="employeeId.set($event)" />
+        </label>
+
+        <label class="field">
+          <span class="field__label">EMAIL ADDRESS</span>
+          <input type="email" placeholder="name@ernestchemists.com" name="email"
+            [ngModel]="email()" (ngModelChange)="email.set($event)" autocomplete="off" />
+        </label>
+        <label class="field">
+          <span class="field__label">ROLE</span>
+          <div class="select">
+            <select name="role" [ngModel]="role()" (ngModelChange)="role.set($event)">
+              <option value="" disabled>Select a role…</option>
+              @for (opt of roleOptions; track opt.value) {
+                <option [value]="opt.value">{{ opt.label }}</option>
+              }
+            </select>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </div>
+        </label>
+
+        <label class="field">
+          <span class="field__label">DEPARTMENT</span>
+          <input type="text" placeholder="e.g. Quality Control" name="department"
+            [ngModel]="department()" (ngModelChange)="department.set($event)" />
+        </label>
+        <label class="field">
+          <span class="field__label">PROFESSIONAL TITLE</span>
+          <input type="text" placeholder="e.g. Senior Analyst" name="title"
+            [ngModel]="title()" (ngModelChange)="title.set($event)" />
+        </label>
+
+        <label class="field field--full">
+          <span class="field__label">TEMPORARY PASSWORD</span>
+          <div class="pw">
+            <input [type]="showPassword() ? 'text' : 'password'" placeholder="Min. 8 characters"
+              name="password" [ngModel]="password()" (ngModelChange)="password.set($event)"
+              autocomplete="new-password" />
+            <button class="pw__toggle" type="button" (click)="showPassword.set(!showPassword())"
+              [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </button>
+            <button class="pw__gen" type="button" (click)="generatePassword()">Generate</button>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="card__foot">
+      <button class="btn btn--ghost" type="button" routerLink="/users" [disabled]="saving()">Cancel</button>
+      <button class="btn btn--primary" type="submit" [disabled]="saving()">
+        {{ saving() ? 'Creating…' : 'Create User' }}
+      </button>
+    </div>
+  </form>
+</section>

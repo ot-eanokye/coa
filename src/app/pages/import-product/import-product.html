@@ -1,0 +1,121 @@
+<section class="page">
+  <div class="page__topbar">
+    <nav class="breadcrumb">
+      <a class="breadcrumb__muted" routerLink="/products">Manage Products</a>
+      <span class="breadcrumb__sep">&rsaquo;</span>
+      <a class="breadcrumb__muted" routerLink="/products/new">Add New Product</a>
+      <span class="breadcrumb__sep">&rsaquo;</span>
+      <span class="breadcrumb__current">File Upload</span>
+    </nav>
+    <button class="btn btn--outline" type="button" [routerLink]="'/products/new'">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 20h9" />
+        <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+      </svg>
+      Proceed to Manual Entry
+    </button>
+  </div>
+
+  <h1 class="page__title">Import Product Documentation</h1>
+  <p class="page__subtitle">Upload official specification sheets or Certificates of Analysis to automatically
+    extract metadata and chemical parameters.</p>
+
+  <div class="layout">
+    <!-- Dropzone -->
+    <div class="dropzone">
+      <span class="dropzone__icon">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--color-blue)"
+          stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="12" y1="18" x2="12" y2="12" />
+          <polyline points="9 15 12 12 15 15" />
+        </svg>
+      </span>
+      <span class="dropzone__title">Drag and drop document here</span>
+      <span class="dropzone__sub">Supported formats: PDF</span>
+      <span class="dropzone__sub">Maximum file size: 25MB</span>
+      <button class="dropzone__btn" type="button">Browse Computer</button>
+    </div>
+
+    <!-- Extracted preview -->
+    <div class="preview">
+      <div class="preview__head">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-blue)"
+          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10" />
+          <line x1="12" y1="20" x2="12" y2="4" />
+          <line x1="6" y1="20" x2="6" y2="14" />
+        </svg>
+        <h2>Extracted Specifications Preview</h2>
+      </div>
+
+      <div class="preview__body">
+        <div class="preview__meta">
+          <div class="meta-block">
+            <span class="meta-block__label">PRODUCT NAME</span>
+            <span class="meta-block__value meta-block__value--lg">NESTER MOUTHWASH (ORIGINAL)</span>
+          </div>
+          <div class="meta-block meta-block--inline">
+            <span class="meta-block__label">BATCH NO:</span>
+            <span class="meta-block__value">0105C</span>
+          </div>
+
+          <hr class="preview__rule" />
+
+          <div class="meta-block">
+            <span class="meta-block__label">DATE OF MFG</span>
+            <span class="meta-block__value meta-block__value--strong">05-2026</span>
+          </div>
+          <div class="meta-block">
+            <span class="meta-block__label">DATE OF EXP</span>
+            <span class="meta-block__value meta-block__value--strong">05-2029</span>
+          </div>
+          <div class="meta-block">
+            <span class="meta-block__label">PRODUCT CATEGORY</span>
+            <span class="meta-block__value meta-block__value--strong">SYRUPS</span>
+          </div>
+          <div class="meta-block">
+            <span class="meta-block__label">DATE SAMPLED</span>
+            <span class="meta-block__value meta-block__value--strong">22-05-2026</span>
+          </div>
+        </div>
+
+        <div class="preview__specs">
+          <span class="preview__specs-label">TEST SPECIFICATIONS</span>
+          <table class="spec-table">
+            <thead>
+              <tr>
+                <th>Test</th>
+                <th>Spec</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of specs; track $index) {
+                <tr>
+                  <td>{{ row.test }}</td>
+                  <td>{{ row.spec }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <hr class="preview__rule preview__rule--full" />
+
+      <div class="preview__foot">
+        <button class="verify-save" type="button" [routerLink]="'/products'">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+            <polyline points="17 21 17 13 7 13 7 21" />
+            <polyline points="7 3 7 8 15 8" />
+          </svg>
+          Verify &amp; Save
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

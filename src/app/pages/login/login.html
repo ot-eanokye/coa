@@ -1,0 +1,170 @@
+<div class="login">
+  <div class="login__grid">
+    <!-- Left: lab imagery -->
+    <div class="login__media">
+      <div
+        class="login__media-frame"
+        role="img"
+        aria-label="Laboratory information management system"
+      ></div>
+    </div>
+
+    <!-- Right: authentication -->
+    <div class="login__panel">
+      <form class="auth" (ngSubmit)="onSubmit()">
+        <div class="auth__logo">
+          <img
+            class="auth__logo-img"
+            src="/assets/logos/ernest-log.jpg"
+            alt="Ernest Chemists Limited"
+          />
+        </div>
+
+        <h1 class="auth__title">Welcome back to CoA MS</h1>
+        <p class="auth__subtitle">
+          Please authenticate to access the laboratory information management system.
+        </p>
+
+        <label class="field">
+          <span class="field__label">EMAIL ADDRESS</span>
+          <span class="field__control">
+            <svg
+              class="field__icon"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="2" y="4" width="20" height="16" rx="2" />
+              <path d="m22 6-10 7L2 6" />
+            </svg>
+            <input
+              type="email"
+              placeholder="technician@ernestchemists.com"
+              autocomplete="username"
+              name="email"
+              [ngModel]="email()"
+              (ngModelChange)="email.set($event)"
+            />
+          </span>
+        </label>
+
+        <label class="field">
+          <span class="field__label-row">
+            <span class="field__label">PASSWORD</span>
+            <a class="field__link" href="#" (click)="$event.preventDefault()">Forgot Password?</a>
+          </span>
+          <span class="field__control">
+            <svg
+              class="field__icon"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              autocomplete="current-password"
+              name="password"
+              [ngModel]="password()"
+              (ngModelChange)="password.set($event)"
+            />
+            <button
+              class="field__toggle"
+              type="button"
+              (click)="togglePassword()"
+              [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </button>
+          </span>
+        </label>
+
+        <label class="checkbox">
+          <input type="checkbox" />
+          <span>Remember me on this device</span>
+        </label>
+
+        <p class="auth__support">
+          Need technical support? <a href="#" (click)="$event.preventDefault()">CONTACT IT ADMIN</a>
+        </p>
+
+        @if (error()) {
+          <div class="auth__error" role="alert">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.9"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            {{ error() }}
+          </div>
+        }
+
+        <button class="auth__submit" type="submit" [disabled]="loading()">
+          {{ loading() ? 'Signing in…' : 'Sign In' }}
+          @if (!loading()) {
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.9"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+          }
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="login__footer">
+    <div class="login__footer-left">
+      <span class="login__footer-brand">ERNEST CHEMISTS</span>
+      <span class="login__footer-copy">© 2024 Ernest Chemists Limited. All rights reserved.</span>
+    </div>
+    <nav class="login__footer-links">
+      <a href="#" (click)="$event.preventDefault()">Privacy Policy</a>
+      <a href="#" (click)="$event.preventDefault()">Terms of Service</a>
+      <a href="#" (click)="$event.preventDefault()">Security Standards</a>
+      <a href="#" (click)="$event.preventDefault()">Contact Support</a>
+    </nav>
+  </footer>
+</div>

@@ -1,0 +1,125 @@
+<section class="page">
+  <div class="page__head">
+    <div>
+      <h1 class="page__title">Analyst Dashboard</h1>
+      <p class="page__subtitle">Welcome back. You have 3 batches awaiting verification.</p>
+    </div>
+    <button class="btn btn--green" type="button" [routerLink]="'/analyst/batch/new'">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="16" />
+        <line x1="8" y1="12" x2="16" y2="12" />
+      </svg>
+      Start New Batch Analysis
+    </button>
+  </div>
+
+  <!-- Stat cards -->
+  <div class="stats">
+    <div class="stat-card">
+      <span class="stat-card__label">ASSIGNED BATCHES</span>
+      <span class="stat-card__value">{{ assignedCount() }}</span>
+      <svg class="stat-card__watermark" width="120" height="120" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 12h-6l-2 3h-4l-2-3H2" />
+        <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
+      </svg>
+    </div>
+
+    <div class="stat-card stat-card--raised">
+      <span class="stat-card__label">IN PROGRESS</span>
+      <span class="stat-card__value stat-card__value--blue">{{ inProgressCount() }}</span>
+      <svg class="stat-card__watermark" width="120" height="120" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+        <rect x="8" y="2" width="8" height="4" rx="1" />
+      </svg>
+    </div>
+
+    <div class="stat-card">
+      <span class="stat-card__label">COMPLETED TODAY</span>
+      <span class="stat-card__value stat-card__value--green">{{ completedCount() }}</span>
+      <span class="stat-card__note">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <path d="m8 12 3 3 5-6" />
+        </svg>
+        100% Accuracy
+      </span>
+      <svg class="stat-card__watermark" width="120" height="120" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2 9.5 4.5 6 4l-.5 3.5L2 9l1.5 3L2 15l3.5 1.5L6 20l3.5-.5L12 22l2.5-2.5L18 20l.5-3.5L22 15l-1.5-3L22 9l-3.5-1.5L18 4l-3.5.5Z" />
+        <path d="m9 12 2 2 4-4" />
+      </svg>
+    </div>
+  </div>
+
+  <!-- Active analysis -->
+  <div class="panel">
+    <div class="panel__head">
+      <h2 class="panel__title">My Active Analysis</h2>
+      <div class="panel__tools">
+        <button class="icon-btn" aria-label="Filter" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="6" x2="20" y2="6" />
+            <line x1="7" y1="12" x2="17" y2="12" />
+            <line x1="10" y1="18" x2="14" y2="18" />
+          </svg>
+        </button>
+        <button class="icon-btn" aria-label="More" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="5" r="1" />
+            <circle cx="12" cy="12" r="1" />
+            <circle cx="12" cy="19" r="1" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>BATCH NUMBER</th>
+          <th>PRODUCT NAME</th>
+          <th>CATEGORY</th>
+          <th>CURRENT STAGE</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of active(); track row.id) {
+          <tr class="row--link" [class.row--flagged]="stageType(row) === 'correction'"
+            [routerLink]="resumeLink(row)">
+            <td class="cell-mono cell-strong">{{ row.batch_no }}</td>
+            <td class="cell-mono">{{ row.product_name }}</td>
+            <td><span class="cat-pill">{{ row.category }}</span></td>
+            <td>
+              <span class="stage" [class.stage--correction]="stageType(row) === 'correction'">
+                <span class="stage__dot" [class.stage__dot--data]="stageType(row) === 'data'"
+                  [class.stage__dot--correction]="stageType(row) === 'correction'"></span>
+                {{ stageLabel(row) }}
+              </span>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4" class="empty">
+              @if (loading()) {
+                Loading your batches…
+              } @else {
+                No active analyses. Click <strong>Start New Batch Analysis</strong> to begin.
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <div class="panel__foot">
+      <span class="panel__count">Showing {{ active().length }} active analyses</span>
+    </div>
+  </div>
+</section>

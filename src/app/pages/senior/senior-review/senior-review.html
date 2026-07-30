@@ -1,0 +1,145 @@
+<section class="page">
+  @if (error()) {
+    <div class="banner banner--error">{{ error() }}</div>
+  }
+
+  <!-- Header card -->
+  <div class="head-card">
+    <div class="head-card__left">
+      <h1 class="head-card__title">Senior Analyst Review: {{ batch()?.batch_no }}</h1>
+      <span class="head-card__product">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 8V7l-3-3H6L3 7v1" />
+          <rect x="3" y="8" width="18" height="13" rx="1" />
+          <line x1="10" y1="12" x2="14" y2="12" />
+        </svg>
+        {{ batch()?.product_name }}
+      </span>
+    </div>
+    <div class="meta">
+      <div class="meta__item">
+        <span class="meta__label">MFG DATE</span>
+        <span class="meta__value">{{ batch()?.mfg_date || '—' }}</span>
+      </div>
+      <div class="meta__item">
+        <span class="meta__label">EXP DATE</span>
+        <span class="meta__value">{{ batch()?.exp_date || '—' }}</span>
+      </div>
+      <div class="meta__item">
+        <span class="meta__label">CATEGORY</span>
+        <span class="meta__value">{{ batch()?.category || '—' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- Left column -->
+    <div class="main">
+      <div class="card">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>TEST PARAMETER</th>
+              <th>SPECIFICATION</th>
+              <th>RESULT VALUE</th>
+              <th class="col-status">STATUS</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of rows(); track row.id) {
+              <tr>
+                <td class="param">{{ row.parameter }}</td>
+                <td class="cell-mono">{{ row.specification }}</td>
+                <td class="cell-mono">{{ row.result_value || '—' }}</td>
+                <td>
+                  <span class="badge" [class.badge--fail]="row.status === 'fail'"
+                    [class.badge--pending]="row.status === 'pending'">{{ row.status | uppercase }}</span>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="4" class="empty">{{ loading() ? 'Loading…' : 'No results recorded.' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sign-row">
+        <div class="prepared">
+          <span class="prepared__label">PREPARED BY (ANALYST)</span>
+          <div class="prepared__id-row">
+            <span class="prepared__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-blue)"
+                stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
+                <path d="m9 12 2 2 4-4" />
+              </svg>
+            </span>
+            <div class="prepared__text">
+              <span class="prepared__name">{{ batch()?.analyst_name || '—' }}</span>
+              <span class="prepared__meta">Started: {{ batch()?.analysis_started || '—' }}</span>
+            </div>
+          </div>
+          <hr class="prepared__rule" />
+          <p class="prepared__note">"Electronically signed via biometric verification"</p>
+        </div>
+
+        <div class="awaiting">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+            <rect x="8" y="2" width="8" height="4" rx="1" />
+            <circle cx="12" cy="14" r="3.5" />
+            <path d="M12 12.7V14l1 .8" />
+          </svg>
+          <span class="awaiting__text">Awaiting your verification check...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column -->
+    <aside class="side">
+      <div class="card actions">
+        <h2 class="actions__title">Approval Actions</h2>
+
+        <span class="actions__label">Senior Analyst Comments</span>
+        <textarea class="actions__textarea" rows="5" name="comments"
+          [ngModel]="comments()" (ngModelChange)="comments.set($event)"
+          placeholder="Enter detailed observations or notes for the quality certificate..."></textarea>
+
+        <label class="verify">
+          <input type="checkbox" [checked]="verified()" (change)="verified.set(!verified())" />
+          <span>I have verified all test results against the master specification.</span>
+        </label>
+
+        <button class="btn btn--green" type="button" (click)="verify()" [disabled]="working()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
+            <path d="m9 12 2 2 4-4" />
+          </svg>
+          {{ working() ? 'Forwarding…' : 'Verify & Forward to QC Manager' }}
+        </button>
+
+        <hr class="actions__rule" />
+
+        <span class="actions__label">AUDIT TRAIL</span>
+        <ul class="audit">
+          @for (entry of events(); track entry.id) {
+            <li class="audit__item">
+              <span class="audit__dot"></span>
+              <div class="audit__body">
+                <span class="audit__label">{{ entry.action }}</span>
+                <span class="audit__time">{{ eventTime(entry) }}</span>
+              </div>
+            </li>
+          } @empty {
+            <li class="audit__item"><span class="audit__label">No events yet.</span></li>
+          }
+        </ul>
+      </div>
+    </aside>
+  </div>
+</section>

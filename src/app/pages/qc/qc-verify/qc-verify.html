@@ -1,0 +1,154 @@
+<section class="page">
+  <h1 class="page__title">Batch Verification and Approval</h1>
+
+  @if (error()) {
+    <div class="banner banner--error">{{ error() }}</div>
+  }
+
+  <div class="layout">
+    <!-- Left column -->
+    <div class="main">
+      <!-- Batch details -->
+      <div class="details">
+        <div class="details__head">
+          <span class="details__eyebrow">PRODUCT BATCH DETAILS</span>
+          <span class="batch-tag">BATCH NO: {{ batch()?.batch_no }}</span>
+        </div>
+        <h2 class="details__name">{{ batch()?.product_name }}</h2>
+        <div class="details__grid">
+          <div class="details__item">
+            <span class="details__label">DATE OF MFG.</span>
+            <span class="details__value">{{ batch()?.mfg_date || '—' }}</span>
+          </div>
+          <div class="details__item">
+            <span class="details__label">DATE OF EXP.</span>
+            <span class="details__value details__value--red">{{ batch()?.exp_date || '—' }}</span>
+          </div>
+          <div class="details__item">
+            <span class="details__label">ANALYSIS STARTED</span>
+            <span class="details__value">{{ batch()?.analysis_started || '—' }}</span>
+          </div>
+          <div class="details__item">
+            <span class="details__label">ANALYSIS COMPLETED</span>
+            <span class="details__value">{{ batch()?.analysis_completed || '—' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analysis results -->
+      <div class="results">
+        <div class="results__head">
+          <span class="results__title">LABORATORY ANALYSIS RESULTS</span>
+          @if (allPass()) {
+            <span class="results__flag">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="m8 12 3 3 5-6" />
+              </svg>
+              ALL TESTS WITHIN SPECIFICATION
+            </span>
+          }
+        </div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>TEST</th>
+              <th>SPECIFICATION</th>
+              <th>RESULTS</th>
+              <th class="col-status">STATUS</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of rows(); track row.id) {
+              <tr>
+                <td class="test">{{ row.parameter }}</td>
+                <td class="spec">{{ row.specification }}</td>
+                <td class="result">{{ row.result_value || '—' }}</td>
+                <td>
+                  <span class="badge" [class.badge--fail]="row.status === 'fail'"
+                    [class.badge--pending]="row.status === 'pending'">{{ row.status | uppercase }}</span>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="4" class="table-empty">{{ loading() ? 'Loading…' : 'No results recorded.' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Signatures -->
+      <div class="signs">
+        <div class="sign">
+          <span class="sign__label">ANALYSED BY (ANALYST)</span>
+          <span class="sign__name">{{ batch()?.analyst_name || '—' }}</span>
+        </div>
+        <div class="sign">
+          <span class="sign__label">CURRENT STAGE</span>
+          <span class="sign__name">Awaiting QC Approval</span>
+        </div>
+        <span class="signs__pending">Pending your approval...</span>
+      </div>
+    </div>
+
+    <!-- Right column -->
+    <aside class="side">
+      <div class="card actions">
+        <h3 class="actions__title">QC Manager Actions</h3>
+        <span class="actions__label">Manager Comments</span>
+        <textarea class="actions__textarea" rows="4" name="comments"
+          [ngModel]="comments()" (ngModelChange)="comments.set($event)"
+          placeholder="Enter batch release notes or observations..."></textarea>
+
+        <div class="notice">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-blue)"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="16" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12.01" y2="8" />
+          </svg>
+          <p>By clicking 'Approve &amp; Release Batch', you certify that this batch ({{ batch()?.batch_no }})
+            complies with all standard specifications and is officially authorized for packaging and market
+            distribution.</p>
+        </div>
+
+        <button class="btn btn--green" type="button" (click)="approve()" [disabled]="working()">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <path d="m8 12 3 3 5-6" />
+          </svg>
+          {{ working() ? 'Working…' : 'Approve & Release Batch' }}
+        </button>
+        <button class="btn btn--reject" type="button" (click)="reject()" [disabled]="working()">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+          </svg>
+          Reject Batch/Flag for Re-test
+        </button>
+      </div>
+
+      <div class="audit-wrap">
+        <span class="audit-wrap__label">AUDIT TRAIL</span>
+        <ul class="audit">
+          @for (entry of events(); track entry.id) {
+            <li class="audit__item">
+              <span class="audit__dot"></span>
+              <div class="audit__body">
+                <span class="audit__title">{{ entry.action }}</span>
+                <span class="audit__time">{{ eventTime(entry) }}</span>
+              </div>
+            </li>
+          } @empty {
+            <li class="audit__item"><span class="audit__title">No events yet.</span></li>
+          }
+        </ul>
+      </div>
+    </aside>
+  </div>
+</section>

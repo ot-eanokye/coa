@@ -1,0 +1,118 @@
+<section class="page">
+  <div class="page__head">
+    <div>
+      <h1 class="page__title">Quality Control Queue</h1>
+      <p class="page__subtitle">Real-time laboratory analysis tracking and approvals.</p>
+    </div>
+    <div class="segment">
+      @for (tab of tabs; track tab) {
+        <button class="segment__btn" [class.segment__btn--active]="activeTab() === tab" type="button"
+          (click)="activeTab.set(tab)">{{ tab }}</button>
+      }
+    </div>
+  </div>
+
+  <!-- Stat cards -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-card__text">
+        <span class="stat-card__label">TOTAL ACTIVE BATCHES</span>
+        <span class="stat-card__value">42</span>
+      </div>
+      <span class="stat-card__icon stat-card__icon--blue">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="8" y1="6" x2="21" y2="6" />
+          <line x1="8" y1="12" x2="21" y2="12" />
+          <line x1="8" y1="18" x2="21" y2="18" />
+          <line x1="3" y1="6" x2="3.01" y2="6" />
+          <line x1="3" y1="12" x2="3.01" y2="12" />
+          <line x1="3" y1="18" x2="3.01" y2="18" />
+        </svg>
+      </span>
+    </div>
+
+    <div class="stat-card stat-card--accent">
+      <div class="stat-card__text">
+        <span class="stat-card__label">COMPLETED</span>
+        <span class="stat-card__value stat-card__value--green">07</span>
+      </div>
+      <span class="stat-card__icon stat-card__icon--green">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 10v12" />
+          <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z" />
+        </svg>
+      </span>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card__text">
+        <span class="stat-card__label">PENDING FINAL APPROVAL</span>
+        <span class="stat-card__value">13</span>
+      </div>
+      <span class="stat-card__icon stat-card__icon--green">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2 9.5 4.5 6 4l-.5 3.5L2 9l1.5 3L2 15l3.5 1.5L6 20l3.5-.5L12 22l2.5-2.5L18 20l.5-3.5L22 15l-1.5-3L22 9l-3.5-1.5L18 4l-3.5.5Z" />
+          <path d="m9 12 2 2 4-4" />
+        </svg>
+      </span>
+    </div>
+  </div>
+
+  <!-- Batches table -->
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>BATCH NUMBER</th>
+          <th>PRODUCT NAME</th>
+          <th>CATEGORY</th>
+          <th>CURRENT STAGE</th>
+          <th>ASSIGNED TO</th>
+          <th class="th-status">STATUS</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (batch of batches; track $index) {
+          <tr>
+            <td class="cell-mono">{{ batch.batchNumber }}</td>
+            <td class="cell-mono cell-strong">{{ batch.product }}</td>
+            <td>{{ batch.category }}</td>
+            <td>{{ batch.stage }}</td>
+            <td>{{ batch.assignedTo }}</td>
+            <td>
+              <span class="pill"
+                [class.pill--progress]="batch.status === 'IN PROGRESS'"
+                [class.pill--flagged]="batch.status === 'FLAGGED'"
+                [class.pill--completed]="batch.status === 'COMPLETED'"
+                [class.pill--review]="batch.status === 'AWAITING REVIEW'">{{ batch.status }}</span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <div class="panel__foot">
+      <span class="panel__count">Showing 4 of 128 Batches</span>
+      <div class="pager">
+        <button class="pager__btn" aria-label="Previous" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+        @for (p of pages; track p) {
+          <button class="pager__btn" [class.pager__btn--active]="p === 1" type="button">{{ p }}</button>
+        }
+        <button class="pager__btn" aria-label="Next" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

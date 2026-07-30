@@ -1,0 +1,156 @@
+<section class="page">
+  <div class="page__topbar">
+    <nav class="breadcrumb">
+      <a class="breadcrumb__muted" routerLink="/products">Manage Products</a>
+      <span class="breadcrumb__sep">&rsaquo;</span>
+      <span class="breadcrumb__current">Add New Product</span>
+    </nav>
+    <button class="btn btn--upload" type="button" [routerLink]="'/products/new/upload'">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+        <polyline points="17 8 12 3 7 8" />
+        <line x1="12" y1="3" x2="12" y2="15" />
+      </svg>
+      Upload Product
+    </button>
+  </div>
+
+  <h1 class="page__title">Add New Product</h1>
+  <p class="page__subtitle">Initialize a new product record with pharmaceutical specifications and release
+    protocols.</p>
+
+  <!-- Basic information -->
+  <div class="section-bar">
+    <div class="section-bar__title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-blue)"
+        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="16" x2="12" y2="12" />
+        <line x1="12" y1="8" x2="12.01" y2="8" />
+      </svg>
+      <h2>Basic Information</h2>
+    </div>
+    <div class="section-bar__actions">
+      <button class="btn btn--cancel" type="button" routerLink="/products" [disabled]="saving()">Cancel</button>
+      <button class="btn btn--save" type="button" (click)="onSubmit()" [disabled]="saving()">
+        {{ saving() ? 'Saving…' : 'Save Product' }}
+      </button>
+    </div>
+  </div>
+  <hr class="rule" />
+
+  @if (error()) {
+    <div class="banner banner--error">{{ error() }}</div>
+  }
+
+  <div class="grid grid--three">
+    <label class="field">
+      <span class="field__label">PRODUCT NAME</span>
+      <input class="field__input" type="text" placeholder="e.g. KIDIVITE SYRUP 200 ml" name="name"
+        [ngModel]="name()" (ngModelChange)="name.set($event)" />
+    </label>
+    <label class="field">
+      <span class="field__label">PRODUCT CATEGORY</span>
+      <div class="select">
+        <select name="category" [ngModel]="category()" (ngModelChange)="category.set($event)">
+          <option value="" disabled>Select category…</option>
+          <option value="Syrup">Syrup</option>
+          <option value="Tablet">Tablet</option>
+          <option value="Capsule">Capsule</option>
+          <option value="Suspension">Suspension</option>
+        </select>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </div>
+    </label>
+    <label class="field">
+      <span class="field__label">BATCH NO</span>
+      <input class="field__input" type="text" placeholder="e.g. 0705C" name="batchNo"
+        [ngModel]="batchNo()" (ngModelChange)="batchNo.set($event)" />
+    </label>
+  </div>
+
+  <div class="grid grid--two">
+    <label class="field">
+      <span class="field__label">MANUFACTURING DATE</span>
+      <input class="field__input" type="text" placeholder="MM/YYYY" name="mfgDate"
+        [ngModel]="mfgDate()" (ngModelChange)="mfgDate.set($event)" />
+    </label>
+    <label class="field">
+      <span class="field__label">EXPIRY DATE</span>
+      <input class="field__input" type="text" placeholder="MM/YYYY" name="expDate"
+        [ngModel]="expDate()" (ngModelChange)="expDate.set($event)" />
+    </label>
+  </div>
+
+  <label class="field field--full">
+    <span class="field__label">ACTIVE INGREDIENTS COMPOSITION</span>
+    <textarea class="field__input" rows="3" name="activeIngredients"
+      placeholder="e.g. Each 5ml of syrup contains: Ascorbic Acid 100mg, Pyridoxine HCl 5mg..."
+      [ngModel]="activeIngredients()" (ngModelChange)="activeIngredients.set($event)"></textarea>
+  </label>
+
+  <!-- Chemical specifications -->
+  <div class="section-bar">
+    <div class="section-bar__title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-blue)"
+        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="20" x2="18" y2="10" />
+        <line x1="12" y1="20" x2="12" y2="4" />
+        <line x1="6" y1="20" x2="6" y2="14" />
+      </svg>
+      <h2>Chemical Specifications</h2>
+    </div>
+    <button class="add-param" type="button" (click)="modalOpen.set(true)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="16" />
+        <line x1="8" y1="12" x2="16" y2="12" />
+      </svg>
+      ADD PARAMETER
+    </button>
+  </div>
+  <hr class="rule" />
+
+  <table class="spec-table">
+    <thead>
+      <tr>
+        <th>TEST PARAMETER</th>
+        <th>SPECIFICATION RANGE</th>
+        <th class="col-action"></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of specs(); track $index) {
+        <tr>
+          <td class="spec-name">{{ row.parameter }}</td>
+          <td class="spec-range">{{ row.spec_range }}</td>
+          <td class="col-action">
+            <div class="row-actions">
+              <button class="act act--del" aria-label="Delete" type="button" (click)="removeSpec($index)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                </svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="3" class="spec-empty">No specifications yet. Use <strong>Add Parameter</strong> to define
+            the product's test ranges.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</section>
+
+@if (modalOpen()) {
+  <app-add-test-parameter (saved)="onParametersSaved($event)" (closed)="modalOpen.set(false)" />
+}

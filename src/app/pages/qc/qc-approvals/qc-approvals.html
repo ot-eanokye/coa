@@ -1,0 +1,67 @@
+<section class="page">
+  <h1 class="page__title">Pending Batch Approvals</h1>
+
+  <div class="toolbar">
+    <div class="search">
+      <svg class="search__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+      <input type="text" placeholder="Search batches..." />
+    </div>
+    <div class="select">
+      <select>
+        <option>All Categories</option>
+        <option>Syrup</option>
+        <option>Tablet</option>
+        <option>Capsule</option>
+      </select>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9" />
+      </svg>
+    </div>
+    <span class="count">Showing {{ queue().length }} pending batches</span>
+  </div>
+
+  @if (error()) {
+    <div class="banner banner--error">{{ error() }}</div>
+  }
+
+  <div class="panel">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>BATCH NO.</th>
+          <th>PRODUCT NAME</th>
+          <th>CATEGORY</th>
+          <th>DATE SUBMITTED</th>
+          <th>SENIOR ANALYST</th>
+          <th class="col-action">ACTIONS</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of queue(); track row.id) {
+          <tr>
+            <td class="cell-mono cell-strong">{{ row.batch_no }}</td>
+            <td class="cell-mono">{{ row.product_name }}</td>
+            <td class="cell-mono">{{ row.category }}</td>
+            <td class="cell-mono">{{ submitted(row) }}</td>
+            <td class="cell-mono">{{ row.analyst_name || '—' }}</td>
+            <td class="col-action">
+              <button class="review-btn" type="button"
+                [routerLink]="['/qc/verify', row.id]">Review &amp; Approve</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="empty">
+              {{ loading() ? 'Loading…' : 'No batches awaiting approval.' }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

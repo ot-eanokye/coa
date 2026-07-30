@@ -1,0 +1,177 @@
+<section class="page">
+  <!-- Stepper -->
+  <div class="stepper">
+    <div class="step">
+      <span class="step__circle step__circle--active">1</span>
+      <span class="step__label step__label--active">INITIALIZATION</span>
+    </div>
+    <span class="step__line"></span>
+    <div class="step">
+      <span class="step__circle">2</span>
+      <span class="step__label">RESULTS ENTRY</span>
+    </div>
+    <span class="step__line"></span>
+    <div class="step">
+      <span class="step__circle">3</span>
+      <span class="step__label">ANALYST REVIEW</span>
+    </div>
+  </div>
+
+  @if (error()) {
+    <div class="banner banner--error">{{ error() }}</div>
+  }
+
+  <div class="layout">
+    <!-- Left column -->
+    <div class="col">
+      <div class="card">
+        <div class="card__title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-blue)"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" />
+          </svg>
+          <h2>Batch Selection</h2>
+        </div>
+
+        <label class="field">
+          <span class="field__label">PRODUCT</span>
+          <div class="select">
+            <select [ngModel]="selectedId()" (ngModelChange)="onSelect($event)" name="product">
+              <option value="">
+                {{ loading() ? 'Loading products…' : 'Select a product…' }}
+              </option>
+              @for (p of productList(); track p.id) {
+                <option [value]="p.id">{{ p.name }} — {{ p.category }}</option>
+              }
+            </select>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </div>
+        </label>
+
+        <label class="field">
+          <span class="field__label">ENTER BATCH NUMBER</span>
+          <div class="batch-row">
+            <input type="text" placeholder="e.g. 0705C" name="batchNo"
+              [ngModel]="batchNo()" (ngModelChange)="batchNo.set($event)" />
+          </div>
+        </label>
+
+        <p class="hint">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="16" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12.01" y2="8" />
+          </svg>
+          Selecting a product loads its release specification below.
+        </p>
+      </div>
+
+      @if (selected(); as product) {
+        <div class="card card--flush">
+          <div class="verify-head">
+            <span class="verify-head__label">PRODUCT VERIFICATION</span>
+            <span class="badge-ok">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="m8 12 3 3 5-6" />
+              </svg>
+              PRODUCT RECOGNIZED
+            </span>
+          </div>
+
+          <div class="verify-body">
+            <div class="verify-grid">
+              <div class="verify-item">
+                <span class="verify-item__label">PRODUCT NAME</span>
+                <span class="verify-item__value verify-item__value--lg">{{ product.name }}</span>
+              </div>
+              <div class="verify-item">
+                <span class="verify-item__label">CATEGORY</span>
+                <span class="verify-item__value verify-item__value--strong">{{ product.category }}</span>
+              </div>
+            </div>
+            <div class="verify-grid verify-grid--three">
+              <div class="verify-item">
+                <span class="verify-item__label">CODE</span>
+                <span class="verify-item__value">{{ product.code || '—' }}</span>
+              </div>
+              <div class="verify-item">
+                <span class="verify-item__label">DATE OF MFG.</span>
+                <span class="verify-item__value verify-item__value--strong">{{ product.mfg_date || '—' }}</span>
+              </div>
+              <div class="verify-item">
+                <span class="verify-item__label">DATE OF EXP.</span>
+                <span class="verify-item__value verify-item__value--strong">{{ product.exp_date || '—' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Right column -->
+    <div class="col">
+      <div class="card card--flush protocol">
+        <div class="protocol__head">
+          <span class="protocol__title">PROTOCOL SUMMARY</span>
+          <span class="rev">SPECIFICATIONS</span>
+        </div>
+
+        <table class="ptable">
+          <thead>
+            <tr>
+              <th>TEST PARAMETER</th>
+              <th class="right">SPECIFICATION</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of specs(); track $index) {
+              <tr>
+                <td>{{ row.parameter }}</td>
+                <td class="right cell-mono">{{ row.spec_range }}</td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="2" class="ptable-empty">
+                  {{ selected() ? 'This product has no specifications defined.' : 'Select a product to view its release protocol.' }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+
+        <div class="protocol__body">
+          <div class="notebox">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-blue)"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+            <p>Verify all analytical methods match the current pharmacopoeia standards before proceeding with
+              laboratory operations.</p>
+          </div>
+
+          <button class="btn btn--dark btn--block" type="button" (click)="startAnalysis()"
+            [disabled]="creating()">
+            {{ creating() ? 'Starting…' : 'START ANALYSIS' }}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </button>
+          <button class="cancel" type="button" [routerLink]="'/analyst/dashboard'">CANCEL INITIALIZATION</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,156 @@
+<section class="page">
+  <!-- Hero -->
+  <div class="hero">
+    <h1 class="hero__title">Certificate of Analysis Management System</h1>
+    <p class="hero__subtitle">Quickly access Certificates of Analysis and laboratory documentation. Enter a Batch
+      Number, Product Name, or Analyst ID to begin your search.</p>
+    <div class="hero__search">
+      <div class="hero__field">
+        <svg class="hero__search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input type="text" placeholder="Search Batch ID or Product Name..." />
+      </div>
+      <button class="btn btn--dark" type="button">Search CoA</button>
+    </div>
+  </div>
+
+  <!-- Laboratory Operations -->
+  <div class="section-head">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-blue)"
+      stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="7" height="7" rx="1" />
+      <rect x="14" y="3" width="7" height="7" rx="1" />
+      <rect x="14" y="14" width="7" height="7" rx="1" />
+      <rect x="3" y="14" width="7" height="7" rx="1" />
+    </svg>
+    <h2>Laboratory Operations</h2>
+  </div>
+
+  <div class="ops">
+    @for (op of operations; track op.title) {
+      <a class="op-card" [routerLink]="op.link">
+        <span class="op-card__icon">
+          @switch (op.icon) {
+            @case ('certificate') {
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                <rect x="8" y="2" width="8" height="4" rx="1" />
+                <path d="m9 14 2 2 4-4" />
+              </svg>
+            }
+            @case ('approval') {
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="16" rx="2" />
+                <path d="m8 11 2 2 4-4" />
+              </svg>
+            }
+            @case ('retrieval') {
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="5" rx="1" />
+                <path d="M4 9v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9" />
+                <line x1="10" y1="13" x2="14" y2="13" />
+              </svg>
+            }
+          }
+        </span>
+        <h3 class="op-card__title">{{ op.title }}</h3>
+        <p class="op-card__desc">{{ op.desc }}</p>
+      </a>
+    }
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="section-head section-head--spread">
+    <div class="section-head__left">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-blue)"
+        stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 3v5h5" />
+        <path d="M3.05 13A9 9 0 1 0 6 5.3L3 8" />
+        <path d="M12 7v5l4 2" />
+      </svg>
+      <h2>Recent Activity</h2>
+    </div>
+    <a class="section-head__link" routerLink="/qc-queue">VIEW ALL &rsaquo;</a>
+  </div>
+
+  <div class="activity">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>BATCH NO</th>
+          <th>PRODUCT NAME</th>
+          <th>DATE</th>
+          <th>ANALYST</th>
+          <th>STATUS</th>
+          <th>ACTIONS</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of activity; track $index) {
+          <tr>
+            <td class="cell-mono cell-center">{{ row.batchNo }}</td>
+            <td class="cell-mono cell-strong">{{ row.product }}</td>
+            <td class="cell-mono">{{ row.date }}</td>
+            <td class="cell-mono">{{ row.analyst }}</td>
+            <td>
+              <span class="badge"
+                [class.badge--released]="row.status === 'RELEASED'"
+                [class.badge--review]="row.status === 'UNDER REVIEW'"
+                [class.badge--oos]="row.status === 'OOS DETECTED'">{{ row.status }}</span>
+            </td>
+            <td>
+              @switch (row.action) {
+                @case ('pdf') {
+                  <button class="act act--blue" aria-label="Download PDF" type="button">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+                      <path d="M14 2v6h6" />
+                      <text x="12" y="17" text-anchor="middle" font-size="6" font-family="Roboto Mono" fill="currentColor" stroke="none">PDF</text>
+                    </svg>
+                  </button>
+                }
+                @case ('view') {
+                  <button class="act act--blue" aria-label="View" type="button">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                  </button>
+                }
+                @case ('alert') {
+                  <button class="act act--red" aria-label="Out of specification" type="button">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" />
+                      <line x1="12" y1="9" x2="12" y2="13" />
+                      <line x1="12" y1="17" x2="12.01" y2="17" />
+                    </svg>
+                  </button>
+                }
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <footer class="foot">
+    <span class="foot__copy">© 2024 Ernest Chemists Laboratory Information Management System. All rights reserved.</span>
+    <nav class="foot__links">
+      <a href="#" (click)="$event.preventDefault()">Privacy Policy</a>
+      <a href="#" (click)="$event.preventDefault()">Terms of Service</a>
+      <a href="#" (click)="$event.preventDefault()">Compliance Documentation</a>
+      <a href="#" (click)="$event.preventDefault()">Support</a>
+    </nav>
+  </footer>
+</section>

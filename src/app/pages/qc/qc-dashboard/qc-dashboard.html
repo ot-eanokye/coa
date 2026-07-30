@@ -1,0 +1,123 @@
+<section class="page">
+  <h1 class="page__title">Dashboard Overview</h1>
+  <p class="page__subtitle">Assign, Approve and view CoA Archive Documents</p>
+
+  <h2 class="section-title">Primary Operations</h2>
+
+  <div class="grid">
+    <div class="ops">
+      @for (op of ops; track op.title) {
+        <a class="op-card" [routerLink]="op.link">
+          <span class="op-card__icon">
+            @switch (op.icon) {
+              @case ('assign') {
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                  <rect x="8" y="2" width="8" height="4" rx="1" />
+                  <line x1="12" y1="11" x2="12" y2="17" />
+                  <line x1="9" y1="14" x2="15" y2="14" />
+                </svg>
+              }
+              @case ('approve') {
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                  <path d="m9 10 2 2 4-4" />
+                </svg>
+              }
+              @case ('archive') {
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="4" width="20" height="5" rx="1" />
+                  <path d="M4 9v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9" />
+                  <line x1="10" y1="13" x2="14" y2="13" />
+                </svg>
+              }
+            }
+          </span>
+          <h3 class="op-card__title">
+            {{ op.title }}
+            @if (op.icon === 'approve' && pendingCount() > 0) {
+              <span class="op-card__count">{{ pendingCount() }}</span>
+            }
+          </h3>
+          <p class="op-card__desc">{{ op.desc }}</p>
+          <span class="op-card__cta">
+            {{ op.cta }}
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </span>
+        </a>
+      }
+    </div>
+
+    <!-- Workload sidebar -->
+    <aside class="workload">
+      <div class="workload__head">
+        <h3>Workload Distribution</h3>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+      </div>
+
+      <div class="workload__list">
+        @for (w of workload(); track w.name) {
+          <div class="wl">
+            <div class="wl__head">
+              <span class="wl__name">{{ w.name }}</span>
+              <span class="wl__badge">{{ w.count }} {{ w.count === 1 ? 'Batch' : 'Batches' }}</span>
+            </div>
+            <div class="wl__track">
+              <div class="wl__fill" [style.width.%]="w.percent"></div>
+            </div>
+          </div>
+        } @empty {
+          <p class="wl-empty">{{ loading() ? 'Loading…' : 'No active batches.' }}</p>
+        }
+      </div>
+    </aside>
+  </div>
+
+  <!-- Recent releases -->
+  <div class="releases">
+    <div class="releases__head">
+      <h3 class="releases__title">Recent Releases</h3>
+      <span class="releases__meta">LAST 24 HOURS</span>
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>BATCH ID</th>
+          <th>PRODUCT NAME</th>
+          <th>RELEASE DATE</th>
+          <th class="col-status">STATUS</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of releases(); track row.id) {
+          <tr>
+            <td class="cell-link">{{ row.batch_no }}</td>
+            <td>{{ row.product_name }}</td>
+            <td class="cell-muted">{{ releaseDate(row) }}</td>
+            <td>
+              <span class="badge">{{ row.stage === 'production_released' ? 'IN PRODUCTION' : 'RELEASED' }}</span>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4" class="empty">{{ loading() ? 'Loading…' : 'No batches released yet.' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

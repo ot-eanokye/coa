@@ -1,0 +1,132 @@
+<section class="page">
+  <div class="page__head">
+    <div>
+      <h1 class="page__title">Senior Analyst Overview</h1>
+      <p class="page__subtitle">Reviewing submissions for final pharmaceutical compliance.</p>
+    </div>
+    <div class="kpis">
+      <div class="kpi">
+        <span class="kpi__label">PENDING CHECK</span>
+        <span class="kpi__value">{{ pendingCount() }}</span>
+      </div>
+      <div class="kpi">
+        <span class="kpi__label">VERIFIED</span>
+        <span class="kpi__value kpi__value--blue">{{ verifiedCount() }}</span>
+      </div>
+      <div class="kpi">
+        <span class="kpi__label">REJECTED</span>
+        <span class="kpi__value kpi__value--red">{{ rejectedCount() }}</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule" />
+
+  <div class="layout">
+    <!-- Main queue -->
+    <div class="main">
+      <h2 class="section-title">Pending Checking Queue</h2>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>BATCH NUMBER</th>
+            <th>PRODUCT NAME</th>
+            <th>CATEGORY</th>
+            <th>SUBMITTED</th>
+            <th>ACTION</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of queue(); track row.id) {
+            <tr>
+              <td class="cell-mono">{{ row.batch_no }}</td>
+              <td>{{ row.product_name }}</td>
+              <td><span class="cat-pill">{{ row.category }}</span></td>
+              <td class="cell-mono">{{ submitted(row) }}</td>
+              <td>
+                <button class="check-btn" type="button"
+                  [routerLink]="['/senior/review', row.id]">Check Results</button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="empty">
+                {{ loading() ? 'Loading…' : 'No batches awaiting your check.' }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <a class="view-all" routerLink="/senior/documents">View full queue &rarr;</a>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="side">
+      <div class="card">
+        <h3 class="card__title">Approval Chain</h3>
+
+        <ol class="chain">
+          <li class="chain__item">
+            <span class="chain__icon chain__icon--blue">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </span>
+            <div class="chain__body">
+              <span class="chain__name">Analyst Submission</span>
+              <span class="chain__desc">Results entered &amp; submitted for review</span>
+            </div>
+          </li>
+          <li class="chain__item">
+            <span class="chain__icon chain__icon--dark">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
+              </svg>
+            </span>
+            <div class="chain__body">
+              <span class="chain__name">Senior Analyst Review</span>
+              <span class="chain__desc chain__desc--blue">{{ pendingCount() }} awaiting your verification</span>
+            </div>
+          </li>
+          <li class="chain__item chain__item--last">
+            <span class="chain__icon chain__icon--muted">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
+                <path d="m9 12 2 2 4-4" />
+              </svg>
+            </span>
+            <div class="chain__body">
+              <span class="chain__name chain__name--muted">QC Manager Approval</span>
+              <span class="chain__desc">Final certification</span>
+            </div>
+          </li>
+        </ol>
+
+        <hr class="card__rule" />
+
+        <h3 class="card__title">Category Load</h3>
+        <div class="loads">
+          @for (load of loads(); track load.label) {
+            <div class="load">
+              <div class="load__head">
+                <span class="load__label">{{ load.label }}</span>
+                <span class="load__pct">{{ load.percent }}%</span>
+              </div>
+              <div class="load__track">
+                <div class="load__fill" [style.width.%]="load.percent"></div>
+              </div>
+            </div>
+          } @empty {
+            <p class="wl-empty">No active batches.</p>
+          }
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
