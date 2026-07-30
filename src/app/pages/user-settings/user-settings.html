@@ -79,7 +79,7 @@
           <span class="setting__title">Change Password</span>
           <span class="setting__desc">Last changed 45 days ago. We recommend updating every 90 days.</span>
         </div>
-        <button class="btn btn--outline" type="button">Update</button>
+        <button class="btn btn--outline" type="button" (click)="router.navigateByUrl('/update-password')">Update</button>
       </div>
 
       <div class="setting">
@@ -98,6 +98,47 @@
           <span class="setting__desc">Protected by Authenticator App (Google/Microsoft).</span>
         </div>
         <button class="btn btn--outline btn--outline-gray" type="button">Manage</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Digital Signature -->
+  <div class="card">
+    <div class="card__head card__head--plain">
+      <div class="card__head-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 20h9" />
+          <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+        </svg>
+        <h2>Digital Signature</h2>
+      </div>
+    </div>
+
+    <div class="card__body">
+      <p class="sig-intro">Save a signature and the system applies it automatically whenever you sign off a
+        batch. Without one, you'll be asked to sign each time.</p>
+
+      @if (currentSignature(); as sig) {
+        <div class="sig-current">
+          <span class="sig-current__label">CURRENT SIGNATURE</span>
+          <img class="sig-current__img" [src]="sig" alt="Your saved signature" />
+          <button class="btn btn--danger" type="button" [disabled]="savingSig()"
+            (click)="removeSignature()">Remove</button>
+        </div>
+      }
+
+      <span class="sig-label">{{ currentSignature() ? 'REPLACE SIGNATURE' : 'CREATE SIGNATURE' }}</span>
+      <app-signature-pad (changed)="onSigChanged($event)" />
+
+      @if (sigMessage()) {
+        <div class="sig-msg">{{ sigMessage() }}</div>
+      }
+
+      <div class="sig-actions">
+        <button class="btn btn--dark" type="button" [disabled]="savingSig()" (click)="saveSignature()">
+          {{ savingSig() ? 'Saving…' : 'Save Signature' }}
+        </button>
       </div>
     </div>
   </div>

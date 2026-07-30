@@ -111,4 +111,9 @@
       {{ forwarding() ? 'Forwarding…' : 'Forward to Senior Analyst' }}
     </button>
   </div>
+
+  @if (showSig()) {
+    <app-signature-modal [busy]="forwarding()" (confirmed)="onSigned($event)"
+      (cancelled)="showSig.set(false)" />
+  }
 </section>

@@ -105,7 +105,7 @@
       <tbody>
         @for (row of releases(); track row.id) {
           <tr>
-            <td class="cell-link">{{ row.batch_no }}</td>
+            <td><a class="cell-link" [routerLink]="['/coa', row.id]">{{ row.batch_no }}</a></td>
             <td>{{ row.product_name }}</td>
             <td class="cell-muted">{{ releaseDate(row) }}</td>
             <td>

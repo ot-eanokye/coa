@@ -1,0 +1,403 @@
+:host {
+  display: block;
+  background: #eef1f4;
+  min-height: 100vh;
+}
+
+.wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #eceff3;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin-bottom: 22px;
+}
+
+.toolbar__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.toolbar__actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 12px 20px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.btn--dark {
+  background: #111418;
+  color: #fff;
+}
+
+.btn--dark:hover {
+  background: #23272d;
+}
+
+.btn--ghost {
+  background: #fff;
+  color: var(--color-text);
+  border-color: var(--color-border-strong);
+}
+
+.btn--ghost:hover {
+  background: var(--color-bg-subtle);
+}
+
+.banner {
+  background: var(--color-red-soft);
+  color: #b42318;
+  border: 1px solid #f3c6c6;
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+/* ----- The sheet ----- */
+.sheet {
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  padding: 46px 48px 34px;
+  color: #111;
+  font-size: 14px;
+}
+
+.coa-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.coa-logo {
+  height: 66px;
+  width: auto;
+}
+
+.coa-doc {
+  position: absolute;
+  right: 0;
+  top: 4px;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #444;
+  line-height: 1.5;
+}
+
+.coa-title {
+  text-align: center;
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin: 10px 0 8px;
+}
+
+.coa-subtitle {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  border-top: 2px solid #111;
+  border-bottom: 2px solid #111;
+  padding: 8px 0;
+  margin-bottom: 18px;
+}
+
+.coa-sampled {
+  text-align: right;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+
+/* Product block */
+.coa-product {
+  border: 2px solid #111;
+  margin-bottom: 20px;
+}
+
+.coa-product__top {
+  background: #eef0f2;
+  padding: 14px 18px;
+  border-bottom: 2px solid #111;
+}
+
+.coa-product__name {
+  font-size: 19px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.coa-product__comp {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.coa-product__bottom {
+  display: flex;
+  align-items: stretch;
+}
+
+.coa-product__batch {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 16px 18px;
+  font-size: 24px;
+  font-weight: 700;
+  border-right: 2px solid #111;
+}
+
+.coa-meta {
+  border-collapse: collapse;
+  width: 55%;
+}
+
+.coa-meta th,
+.coa-meta td {
+  border-bottom: 1px solid #111;
+  padding: 9px 14px;
+  text-align: left;
+  font-size: 13px;
+}
+
+.coa-meta tr:last-child th,
+.coa-meta tr:last-child td {
+  border-bottom: none;
+}
+
+.coa-meta th {
+  font-weight: 700;
+  border-right: 1px solid #111;
+  white-space: nowrap;
+}
+
+.coa-meta td {
+  font-family: var(--font-mono);
+}
+
+/* Results table */
+.coa-results {
+  width: 100%;
+  border-collapse: collapse;
+  border: 2px solid #111;
+  margin-bottom: 20px;
+}
+
+.coa-results th {
+  background: #eef0f2;
+  border: 1px solid #111;
+  padding: 9px 12px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.coa-results td {
+  border: 1px solid #111;
+  padding: 11px 12px;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.c-no {
+  width: 46px;
+  text-align: center !important;
+  font-family: var(--font-mono);
+}
+
+.c-test {
+  width: 26%;
+  font-weight: 600;
+}
+
+.c-res {
+  width: 30%;
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+/* Conclusion */
+.coa-conclusion {
+  border: 2px solid #111;
+  text-align: center;
+  padding: 20px 18px;
+  margin-bottom: 26px;
+}
+
+.coa-conclusion--empty {
+  border-style: dashed;
+}
+
+.coa-conclusion__line {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.coa-conclusion__release {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1d6efe;
+}
+
+.coa-conclusion__reject {
+  font-size: 17px;
+  font-weight: 700;
+  color: #dc2626;
+}
+
+.coa-conclusion__pending {
+  font-size: 15px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+/* Signatures */
+.coa-sign {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #111;
+  margin-bottom: 26px;
+}
+
+.coa-sign th {
+  border: 1px solid #111;
+  background: #eef0f2;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  padding: 8px;
+  text-align: center;
+  width: 33.33%;
+}
+
+.coa-sign td {
+  border: 1px solid #111;
+  padding: 8px 12px;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.coa-sign .k {
+  font-weight: 700;
+  margin-right: 12px;
+}
+
+.coa-sign .v {
+  font-family: var(--font-mono);
+}
+
+.coa-sign__sig td {
+  height: 46px;
+}
+
+.sig-line {
+  display: inline-block;
+  border-bottom: 1px solid #111;
+  min-width: 130px;
+  height: 22px;
+  vertical-align: bottom;
+}
+
+.sig-img {
+  display: inline-block;
+  height: 40px;
+  max-width: 150px;
+  object-fit: contain;
+  vertical-align: bottom;
+}
+
+/* Footer */
+.coa-foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.coa-foot__doc {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: var(--font-mono);
+  color: #111;
+}
+
+/* ----- Print ----- */
+@media print {
+  :host {
+    background: #fff;
+  }
+  .wrap {
+    max-width: none;
+    padding: 0;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .sheet {
+    box-shadow: none;
+    border-radius: 0;
+    padding: 10mm 12mm;
+    font-size: 12px;
+  }
+  .coa-title {
+    font-size: 30px;
+  }
+  @page {
+    size: A4 portrait;
+    margin: 8mm;
+  }
+}
+
+@media (max-width: 720px) {
+  .sheet {
+    padding: 24px 18px;
+  }
+  .coa-product__bottom {
+    flex-direction: column;
+  }
+  .coa-product__batch {
+    border-right: none;
+    border-bottom: 2px solid #111;
+  }
+  .coa-meta {
+    width: 100%;
+  }
+}

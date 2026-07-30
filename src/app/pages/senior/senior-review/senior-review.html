@@ -142,4 +142,9 @@
       </div>
     </aside>
   </div>
+
+  @if (showSig()) {
+    <app-signature-modal [busy]="working()" (confirmed)="onSigned($event)"
+      (cancelled)="showSig.set(false)" />
+  }
 </section>

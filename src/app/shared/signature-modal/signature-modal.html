@@ -1,0 +1,27 @@
+<div class="overlay" (click)="cancelled.emit()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal__head">
+      <h2>Add your signature</h2>
+      <p>You don't have a saved signature. Sign below to complete this sign-off.</p>
+    </div>
+
+    <div class="modal__body">
+      @if (error()) {
+        <div class="banner">{{ error() }}</div>
+      }
+      <app-signature-pad (changed)="onChanged($event)" />
+
+      <label class="save-opt">
+        <input type="checkbox" [checked]="save()" (change)="save.set(!save())" />
+        <span>Save this signature to my profile and reuse it automatically next time.</span>
+      </label>
+    </div>
+
+    <div class="modal__foot">
+      <button class="btn btn--ghost" type="button" (click)="cancelled.emit()" [disabled]="busy()">Cancel</button>
+      <button class="btn btn--primary" type="button" (click)="confirm()" [disabled]="busy()">
+        {{ busy() ? 'Submitting…' : 'Sign & Continue' }}
+      </button>
+    </div>
+  </div>
+</div>

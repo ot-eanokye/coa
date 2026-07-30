@@ -3,11 +3,13 @@ import { UpperCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Batch, BatchEvent, BatchResult, BatchService } from '../../../core/batch.service';
+import { AuthService } from '../../../core/auth.service';
+import { SignatureModal } from '../../../shared/signature-modal/signature-modal';
 
 @Component({
   selector: 'app-senior-review',
   standalone: true,
-  imports: [FormsModule, UpperCasePipe],
+  imports: [FormsModule, UpperCasePipe, SignatureModal],
   templateUrl: './senior-review.html',
   styleUrl: './senior-review.scss',
 })
@@ -15,6 +17,7 @@ export class SeniorReview implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly batches = inject(BatchService);
+  private readonly auth = inject(AuthService);
 
   readonly batch = signal<Batch | null>(null);
   readonly rows = signal<BatchResult[]>([]);
@@ -24,6 +27,7 @@ export class SeniorReview implements OnInit {
 
   readonly loading = signal(true);
   readonly working = signal(false);
+  readonly showSig = signal(false);
   readonly error = signal<string | null>(null);
 
   private id = '';
@@ -57,9 +61,30 @@ export class SeniorReview implements OnInit {
       this.error.set('Please confirm you have verified all results against the master specification.');
       return;
     }
+    const saved = this.auth.profile()?.signature_url;
+    if (saved) {
+      await this.doVerify(saved);
+    } else {
+      this.showSig.set(true);
+    }
+  }
+
+  async onSigned(e: { dataUrl: string; save: boolean }): Promise<void> {
+    this.showSig.set(false);
+    if (e.save) {
+      try {
+        await this.auth.saveSignature(e.dataUrl);
+      } catch {
+        /* best-effort */
+      }
+    }
+    await this.doVerify(e.dataUrl);
+  }
+
+  private async doVerify(signature: string): Promise<void> {
     this.working.set(true);
     try {
-      await this.batches.seniorVerify(this.id, this.comments().trim() || undefined);
+      await this.batches.seniorVerify(this.id, signature, this.comments().trim() || undefined);
       await this.router.navigate(['/senior/dashboard']);
     } catch (e) {
       this.error.set(e instanceof Error ? e.message : 'Could not forward the batch.');

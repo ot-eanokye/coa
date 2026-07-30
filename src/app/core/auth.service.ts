@@ -101,6 +101,69 @@ export class AuthService {
     return ROLE_HOME[profile.role] ?? '/login';
   }
 
+  /** Save (or clear) the signed-in user's reusable digital signature. */
+  async saveSignature(dataUrl: string | null): Promise<void> {
+    const id = this._profile()?.id;
+    if (!id) {
+      throw new Error('You must be signed in.');
+    }
+    const { error } = await this.supabase.client
+      .from('profiles')
+      .update({ signature_url: dataUrl })
+      .eq('id', id);
+    if (error) {
+      throw new Error(error.message);
+    }
+    const current = this._profile();
+    if (current) {
+      this._profile.set({ ...current, signature_url: dataUrl });
+    }
+  }
+
+  /** Update the signed-in user's password. */
+  async updatePassword(currentPassword: string, newPassword: string): Promise<void> {
+    if (!this._session()) {
+      throw new Error('You must be signed in.');
+    }
+    // First verify the current password is correct
+    const { error: authError } = await this.supabase.client.auth.signInWithPassword({
+      email: this._session()!.user.email!,
+      password: currentPassword,
+    });
+    if (authError) {
+      throw new Error('Current password is incorrect.');
+    }
+    // Update to new password
+    const { error } = await this.supabase.client.auth.updateUser({
+      password: newPassword,
+    });
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  /** Reset a user's credentials (admin only). Returns temporary password. */
+  async resetUserCredentials(
+    userId: string,
+    temporaryPassword: string,
+    requirePasswordChange: boolean,
+    resetMfa: boolean
+  ): Promise<{ temporaryPassword: string }> {
+    // Call admin function via Supabase edge function
+    const { data, error } = await this.supabase.client.functions.invoke('admin-reset-credentials', {
+      body: {
+        userId,
+        temporaryPassword,
+        requirePasswordChange,
+        resetMfa,
+      },
+    });
+    if (error) {
+      throw new Error(error.message);
+    }
+    return data;
+  }
+
   async signOut(): Promise<void> {
     await this.supabase.client.auth.signOut();
     this._session.set(null);

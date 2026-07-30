@@ -1,9 +1,11 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Batch, BatchService } from '../../../core/batch.service';
 
 @Component({
   selector: 'app-production-dashboard',
   standalone: true,
+  imports: [RouterLink],
   templateUrl: './production-dashboard.html',
   styleUrl: './production-dashboard.scss',
 })

@@ -87,6 +87,14 @@
             </td>
             <td class="col-action">
               <div class="actions">
+                <a class="view-coa" [routerLink]="['/coa', row.id]">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                  View CoA
+                </a>
                 <button class="signoff" type="button" [disabled]="busyId() === row.id"
                   (click)="signOff(row)">{{ busyId() === row.id ? 'SIGNING…' : 'SIGN OFF' }}</button>
               </div>

@@ -17,6 +17,7 @@ export interface Profile {
   title: string | null;
   status: UserStatus;
   avatar_url: string | null;
+  signature_url: string | null;
   created_at: string;
 }
 

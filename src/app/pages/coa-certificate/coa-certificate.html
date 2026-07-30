@@ -1,0 +1,189 @@
+<div class="wrap">
+  <!-- Toolbar (hidden when printing) -->
+  <div class="toolbar no-print">
+    <button class="toolbar__title" type="button" (click)="back()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-blue)"
+        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+        <polyline points="14 2 14 8 20 8" />
+      </svg>
+      CoA Preview
+    </button>
+    <div class="toolbar__actions">
+      <button class="btn btn--dark" type="button" (click)="print()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 6 2 18 2 18 9" />
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+          <rect x="6" y="14" width="12" height="8" rx="1" />
+        </svg>
+        Print Document
+      </button>
+      <button class="btn btn--ghost" type="button" (click)="exportPdf()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+        Export PDF
+      </button>
+    </div>
+  </div>
+
+  @if (error()) {
+    <div class="banner no-print">{{ error() }}</div>
+  }
+
+  <!-- The certificate sheet -->
+  <div class="sheet">
+    <header class="coa-head">
+      <img class="coa-logo" src="/assets/logos/ec_pdf_logo.png" alt="Ernest Chemists Limited" />
+      <div class="coa-doc">
+        <div>APPENDIX 3</div>
+        <div>PG 1 OF 1</div>
+      </div>
+    </header>
+
+    <h1 class="coa-title">CERTIFICATE OF ANALYSIS</h1>
+    <div class="coa-subtitle">BULK PRODUCT — {{ categoryLabel() }}</div>
+
+    <div class="coa-sampled">DATE SAMPLED: {{ fmt(batch()?.analysis_started) }}</div>
+
+    <!-- Product / batch block -->
+    <div class="coa-product">
+      <div class="coa-product__top">
+        <div class="coa-product__name">PRODUCT: {{ batch()?.product_name }}</div>
+        @if (composition()) {
+          <div class="coa-product__comp">{{ composition() }}</div>
+        }
+      </div>
+      <div class="coa-product__bottom">
+        <div class="coa-product__batch">BATCH NO.: {{ batch()?.batch_no }}</div>
+        <table class="coa-meta">
+          <tr>
+            <th>DATE OF MFG.</th>
+            <td>{{ batch()?.mfg_date || '' }}</td>
+          </tr>
+          <tr>
+            <th>DATE OF EXP.</th>
+            <td>{{ batch()?.exp_date || '' }}</td>
+          </tr>
+          <tr>
+            <th>ANALYSIS STARTED</th>
+            <td>{{ fmt(batch()?.analysis_started) }}</td>
+          </tr>
+          <tr>
+            <th>ANALYSIS COMPLETED</th>
+            <td>{{ fmt(batch()?.analysis_completed) }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <table class="coa-results">
+      <thead>
+        <tr>
+          <th class="c-no">NO.</th>
+          <th class="c-test">TEST</th>
+          <th class="c-spec">SPECIFICATION</th>
+          <th class="c-res">RESULTS</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of results(); track row.id; let i = $index) {
+          <tr>
+            <td class="c-no">{{ i + 1 }}.</td>
+            <td class="c-test">{{ row.parameter }}</td>
+            <td class="c-spec">{{ row.specification }}</td>
+            <td class="c-res">{{ row.result_value }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td class="c-no"></td>
+            <td class="c-test"></td>
+            <td class="c-spec">{{ loading() ? 'Loading…' : 'No test parameters.' }}</td>
+            <td class="c-res"></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <!-- Conclusion -->
+    <div class="coa-conclusion" [class.coa-conclusion--empty]="!released() && !rejected()">
+      @if (released()) {
+        <div class="coa-conclusion__line">CONCLUSION: PRODUCT COMPLIES WITH STANDARD SPECIFICATIONS.</div>
+        <div class="coa-conclusion__release">PRODUCT IS RELEASED FOR PACKAGING.</div>
+      } @else if (rejected()) {
+        <div class="coa-conclusion__line">CONCLUSION: PRODUCT DOES NOT COMPLY WITH STANDARD SPECIFICATIONS.</div>
+        <div class="coa-conclusion__reject">BATCH FLAGGED FOR RE-TEST.</div>
+      } @else {
+        <div class="coa-conclusion__pending">CONCLUSION: ANALYSIS IN PROGRESS — AWAITING FINAL APPROVAL.</div>
+      }
+    </div>
+
+    <!-- Signatures -->
+    <table class="coa-sign">
+      <thead>
+        <tr>
+          <th>ANALYSED BY</th>
+          <th>CHECKED BY</th>
+          <th>APPROVED BY</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="k">Designation</span><span class="v">{{ analysedBy().designation }}</span></td>
+          <td><span class="k">Designation</span><span class="v">{{ checkedBy().designation }}</span></td>
+          <td><span class="k">Designation</span><span class="v">{{ approvedBy().designation }}</span></td>
+        </tr>
+        <tr>
+          <td><span class="k">Name</span><span class="v">{{ analysedBy().name }}</span></td>
+          <td><span class="k">Name</span><span class="v">{{ checkedBy().name }}</span></td>
+          <td><span class="k">Name</span><span class="v">{{ approvedBy().name }}</span></td>
+        </tr>
+        <tr class="coa-sign__sig">
+          <td>
+            <span class="k">Signature</span>
+            @if (analysedBy().signature) {
+              <img class="sig-img" [src]="analysedBy().signature" alt="signature" />
+            } @else {
+              <span class="sig-line"></span>
+            }
+          </td>
+          <td>
+            <span class="k">Signature</span>
+            @if (checkedBy().signature) {
+              <img class="sig-img" [src]="checkedBy().signature" alt="signature" />
+            } @else {
+              <span class="sig-line"></span>
+            }
+          </td>
+          <td>
+            <span class="k">Signature</span>
+            @if (approvedBy().signature) {
+              <img class="sig-img" [src]="approvedBy().signature" alt="signature" />
+            } @else {
+              <span class="sig-line"></span>
+            }
+          </td>
+        </tr>
+        <tr>
+          <td><span class="k">Date</span><span class="v">{{ analysedBy().date }}</span></td>
+          <td><span class="k">Date</span><span class="v">{{ checkedBy().date }}</span></td>
+          <td><span class="k">Date</span><span class="v">{{ approvedBy().date }}</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Footer -->
+    <footer class="coa-foot">
+      <span class="coa-foot__id">System Generated Report — Verification ID: {{ verificationId() }}</span>
+      <span class="coa-foot__doc">
+        <span>QAD/OP/018</span>
+        <strong>Revision No.: R5</strong>
+      </span>
+    </footer>
+  </div>
+</div>

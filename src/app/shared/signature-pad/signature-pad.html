@@ -1,0 +1,19 @@
+<div class="pad">
+  <canvas #canvas class="pad__canvas" width="600" height="200"
+    (pointerdown)="start($event)" (pointermove)="move($event)" (pointerup)="end()"
+    (pointerleave)="end()"></canvas>
+  <div class="pad__actions">
+    <label class="pad__upload">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+        <polyline points="17 8 12 3 7 8" />
+        <line x1="12" y1="3" x2="12" y2="15" />
+      </svg>
+      Upload image
+      <input type="file" accept="image/*" (change)="onFile($event)" hidden />
+    </label>
+    <button type="button" class="pad__clear" (click)="clear()">Clear</button>
+  </div>
+  <p class="pad__hint">Draw your signature above, or upload an image of it.</p>
+</div>

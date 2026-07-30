@@ -4,13 +4,19 @@ import { AnalystShell } from './shared/analyst-shell/analyst-shell';
 import { SeniorShell } from './shared/senior-shell/senior-shell';
 import { QcShell } from './shared/qc-shell/qc-shell';
 import { ProductionShell } from './shared/production-shell/production-shell';
-import { guestGuard, roleGuard } from './core/auth.guards';
+import { authGuard, guestGuard, roleGuard } from './core/auth.guards';
 
 export const routes: Routes = [
   {
     path: 'login',
     canActivate: [guestGuard],
     loadComponent: () => import('./pages/login/login').then((m) => m.Login),
+  },
+  {
+    path: 'coa/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/coa-certificate/coa-certificate').then((m) => m.CoaCertificate),
   },
   {
     path: 'analyst',

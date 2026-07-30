@@ -1,11 +1,12 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { Batch, BatchService } from '../../core/batch.service';
 
 @Component({
   selector: 'app-archived-documents',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './archived-documents.html',
   styleUrl: './archived-documents.scss',
 })

@@ -45,6 +45,7 @@ export interface BatchEvent {
   action: string;
   actor_name: string | null;
   note: string | null;
+  signature: string | null;
   created_at: string;
 }
 
@@ -228,14 +229,14 @@ export class BatchService {
     }
   }
 
-  forwardToSenior(id: string, note?: string) {
-    return this.transition(id, 'senior_review', 'Ready for Senior Analyst Check', note);
+  forwardToSenior(id: string, signature?: string | null, note?: string) {
+    return this.transition(id, 'senior_review', 'Ready for Senior Analyst Check', note, {}, signature);
   }
-  seniorVerify(id: string, note?: string) {
-    return this.transition(id, 'qc_approval', 'Senior Analyst Checked', note);
+  seniorVerify(id: string, signature?: string | null, note?: string) {
+    return this.transition(id, 'qc_approval', 'Senior Analyst Checked', note, {}, signature);
   }
-  qcApprove(id: string, note?: string) {
-    return this.transition(id, 'released', 'Approved & Released', note, { conclusion: note ?? null });
+  qcApprove(id: string, signature?: string | null, note?: string) {
+    return this.transition(id, 'released', 'Approved & Released', note, { conclusion: note ?? null }, signature);
   }
   reject(id: string, note?: string) {
     return this.transition(id, 'rejected', 'Rejected / Flagged for Re-test', note);
@@ -250,6 +251,7 @@ export class BatchService {
     action: string,
     note?: string,
     extra: Record<string, unknown> = {},
+    signature?: string | null,
   ): Promise<void> {
     const { data, error } = await this.client
       .from('batches')
@@ -263,10 +265,15 @@ export class BatchService {
         'This batch could not be advanced — it may have already moved on, or your role cannot act on it at its current stage.',
       );
     }
-    await this.addEvent(id, action, note);
+    await this.addEvent(id, action, note, signature);
   }
 
-  private async addEvent(batchId: string, action: string, note?: string): Promise<void> {
+  private async addEvent(
+    batchId: string,
+    action: string,
+    note?: string,
+    signature?: string | null,
+  ): Promise<void> {
     const p = this.auth.profile();
     await this.client.from('batch_events').insert({
       batch_id: batchId,
@@ -274,6 +281,7 @@ export class BatchService {
       actor_id: p?.id ?? null,
       actor_name: p?.full_name ?? null,
       note: note ?? null,
+      signature: signature ?? null,
     });
   }
 

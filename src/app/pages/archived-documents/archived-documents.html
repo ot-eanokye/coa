@@ -107,21 +107,21 @@
             </td>
             <td>
               <div class="actions">
-                <button class="act act--blue" aria-label="View" type="button">
+                <a class="act act--blue" aria-label="View CoA" [routerLink]="['/coa', rec.id]">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                     stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" />
                     <circle cx="12" cy="12" r="3" />
                   </svg>
-                </button>
-                <button class="act act--dark" aria-label="Download" type="button">
+                </a>
+                <a class="act act--dark" aria-label="Download CoA" [routerLink]="['/coa', rec.id]">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                     stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                     <polyline points="7 10 12 15 17 10" />
                     <line x1="12" y1="15" x2="12" y2="3" />
                   </svg>
-                </button>
+                </a>
               </div>
             </td>
           </tr>
