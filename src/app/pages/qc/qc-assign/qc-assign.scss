@@ -116,10 +116,32 @@
   pointer-events: none;
 }
 
+.assign-msg {
+  margin-top: 18px;
+  font-size: 14px;
+  color: #157a48;
+}
+
+.assign-msg--err {
+  color: #b42318;
+}
+
+.assign-empty {
+  text-align: center;
+  color: var(--color-muted);
+  padding: 34px 20px;
+  font-size: 15px;
+}
+
 .form__actions {
   display: flex;
   justify-content: flex-end;
   margin-top: 24px;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
 
 .btn {

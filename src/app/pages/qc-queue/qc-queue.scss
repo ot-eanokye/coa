@@ -160,6 +160,21 @@
   font-size: 14px;
 }
 
+.row--link {
+  cursor: pointer;
+}
+
+.row--link:hover td {
+  background: #f5f8ff;
+}
+
+.empty {
+  text-align: center;
+  color: var(--color-muted);
+  padding: 40px 20px;
+  font-size: 15px;
+}
+
 .cell-strong {
   font-weight: 700;
 }

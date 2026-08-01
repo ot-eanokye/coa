@@ -1,6 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
+import { UsersService } from '../../core/users.service';
+import { Profile, ROLE_LABELS } from '../../core/models';
 
 @Component({
   selector: 'app-reset-credentials',
@@ -8,9 +10,13 @@ import { AuthService } from '../../core/auth.service';
   templateUrl: './reset-credentials.html',
   styleUrl: './reset-credentials.scss',
 })
-export class ResetCredentials {
+export class ResetCredentials implements OnInit {
   private readonly auth = inject(AuthService);
+  private readonly users = inject(UsersService);
+  private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+
+  readonly ROLE_LABELS = ROLE_LABELS;
 
   readonly showPassword = signal(false);
   readonly requireChange = signal(true);
@@ -21,7 +27,27 @@ export class ResetCredentials {
 
   readonly temporaryPassword = signal('');
   readonly confirmPassword = signal('');
-  readonly targetUserId = signal(''); // Would be set from user selection
+  readonly targetUserId = signal('');
+  readonly targetUser = signal<Profile | null>(null);
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id') ?? '';
+    this.targetUserId.set(id);
+    if (id) {
+      this.users
+        .get(id)
+        .then((u) => this.targetUser.set(u))
+        .catch(() => {
+          this.message.set('Could not load that user.');
+          this.messageType.set('error');
+        });
+    }
+  }
+
+  initials(name: string): string {
+    const parts = (name ?? '').trim().split(/\s+/).filter(Boolean);
+    return parts.length ? (parts[0][0] + (parts[1]?.[0] ?? '')).toUpperCase() : '??';
+  }
 
   togglePassword(): void {
     this.showPassword.update((v) => !v);
@@ -78,7 +104,7 @@ export class ResetCredentials {
       this.temporaryPassword.set('');
       this.confirmPassword.set('');
       setTimeout(() => {
-        this.router.navigateByUrl('/user-management');
+        this.router.navigateByUrl('/users');
       }, 2000);
     } catch (e) {
       this.message.set(e instanceof Error ? e.message : 'Could not reset credentials.');
@@ -89,6 +115,6 @@ export class ResetCredentials {
   }
 
   onCancel(): void {
-    this.router.navigateByUrl('/user-management');
+    this.router.navigateByUrl('/users');
   }
 }

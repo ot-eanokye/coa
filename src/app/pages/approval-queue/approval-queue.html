@@ -55,45 +55,36 @@
         </tr>
       </thead>
       <tbody>
-        @for (row of approvals; track row.batchId) {
+        @for (row of released(); track row.id) {
           <tr>
-            <td class="cell-mono">{{ row.batchId }}</td>
-            <td class="cell-strong">{{ row.product }}</td>
+            <td class="cell-mono"><a class="cell-link" [routerLink]="['/coa', row.id]">{{ row.batch_no }}</a></td>
+            <td class="cell-strong">{{ row.product_name }}</td>
             <td>{{ row.category }}</td>
-            <td class="cell-mono cell-muted">{{ row.approvalDate }}</td>
+            <td class="cell-mono cell-muted">{{ approvalDate(row) }}</td>
             <td>
               <span class="badge">READY FOR DISPATCH</span>
             </td>
             <td class="td-actions">
-              <button class="dispatch" type="button">DISPATCH TO PRODUCTION</button>
+              <button class="dispatch" type="button" [disabled]="busyId() === row.id"
+                (click)="dispatch(row)">{{ busyId() === row.id ? 'DISPATCHING…' : 'DISPATCH TO PRODUCTION' }}</button>
             </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="empty">{{ loading() ? 'Loading…' : 'No batches ready for dispatch.' }}</td>
           </tr>
         }
       </tbody>
     </table>
 
     <div class="panel__foot">
-      <span class="panel__count">Showing 4 of 28 pending approvals</span>
-      <div class="pager">
-        <button class="pager__btn" aria-label="Previous" type="button">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
-        </button>
-        <button class="pager__btn" aria-label="Next" type="button">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6" />
-          </svg>
-        </button>
-      </div>
+      <span class="panel__count">Showing {{ released().length }} pending approvals</span>
     </div>
   </div>
 
   <!-- Stage cards -->
   <div class="stages">
-    @for (stage of stages; track stage.title) {
+    @for (stage of stages(); track stage.title) {
       <div class="stage-card">
         <div class="stage-card__head">
           <span class="stage-card__icon">

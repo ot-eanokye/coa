@@ -1,12 +1,13 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
 import { SignaturePad } from '../../shared/signature-pad/signature-pad';
 
 @Component({
   selector: 'app-user-settings',
   standalone: true,
-  imports: [SignaturePad],
+  imports: [SignaturePad, FormsModule, RouterLink],
   templateUrl: './user-settings.html',
   styleUrl: './user-settings.scss',
 })
@@ -16,10 +17,34 @@ export class UserSettings {
 
   readonly profile = this.auth.profile;
   readonly currentSignature = computed(() => this.auth.profile()?.signature_url ?? null);
+  readonly home = computed(() => this.auth.homePath());
+
+  readonly fullName = signal(this.auth.profile()?.full_name ?? '');
+  readonly title = signal(this.auth.profile()?.title ?? '');
+  readonly savingProfile = signal(false);
+  readonly profileMessage = signal<string | null>(null);
 
   readonly sigValue = signal<string | null>(null);
   readonly savingSig = signal(false);
   readonly sigMessage = signal<string | null>(null);
+
+  async saveProfile(): Promise<void> {
+    if (this.savingProfile()) return;
+    this.profileMessage.set(null);
+    if (!this.fullName().trim()) {
+      this.profileMessage.set('Full name is required.');
+      return;
+    }
+    this.savingProfile.set(true);
+    try {
+      await this.auth.updateProfile({ full_name: this.fullName().trim(), title: this.title().trim() });
+      this.profileMessage.set('Profile updated.');
+    } catch (e) {
+      this.profileMessage.set(e instanceof Error ? e.message : 'Could not update profile.');
+    } finally {
+      this.savingProfile.set(false);
+    }
+  }
 
   onSigChanged(v: string | null): void {
     this.sigValue.set(v);

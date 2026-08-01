@@ -249,6 +249,13 @@
   color: #b91c1c;
 }
 
+.dash-empty {
+  text-align: center;
+  color: var(--color-muted);
+  padding: 34px 20px;
+  font-size: 15px;
+}
+
 /* Action icons */
 .act {
   background: transparent;

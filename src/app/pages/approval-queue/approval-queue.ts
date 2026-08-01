@@ -1,11 +1,6 @@
-import { Component } from '@angular/core';
-
-interface Approval {
-  batchId: string;
-  product: string;
-  category: string;
-  approvalDate: string;
-}
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { Batch, BatchService } from '../../core/batch.service';
 
 interface StageCard {
   title: string;
@@ -19,21 +14,55 @@ interface StageCard {
 @Component({
   selector: 'app-approval-queue',
   standalone: true,
+  imports: [RouterLink],
   templateUrl: './approval-queue.html',
   styleUrl: './approval-queue.scss',
 })
-export class ApprovalQueue {
-  readonly approvals: Approval[] = [
-    { batchId: 'B2024-1102', product: 'Ernest Vitamin C Syrup 100ml', category: 'Syrup', approvalDate: '2024-10-24' },
-    { batchId: 'B2024-1105', product: 'Ernest Amoxicillin 500mg', category: 'Capsule', approvalDate: '2024-10-24' },
-    { batchId: 'B2024-1108', product: 'Ernest Paracetamol 500mg', category: 'Tablet', approvalDate: '2024-10-23' },
-    { batchId: 'B2024-1110', product: 'Ernest Baby Gripe Water', category: 'Syrup', approvalDate: '2024-10-23' },
-  ];
+export class ApprovalQueue implements OnInit {
+  private readonly batches = inject(BatchService);
 
-  readonly stages: StageCard[] = [
-    { title: 'Analyst Verification', icon: 'shield', label: 'DIGITAL SIGNATURE', value: 'VERIFIED', valueTone: 'green', note: 'Authentication logs maintained in LIMS secure ledger.' },
-    { title: 'Senior Analyst Review', icon: 'check', label: 'VERIFICATION STATUS', value: 'VERIFIED', valueTone: 'green', note: 'Results cross-checked and validated for QC Manager review.' },
-    { title: 'QC Manager Approval', icon: 'clipboard', label: 'APPROVAL STATUS', value: 'COMPLETED', valueTone: 'green', note: 'All chemical and microbiological tests validated.' },
-    { title: 'Dispatch Readiness', icon: 'truck', label: 'BATCH QUEUE', value: '4 PENDING', valueTone: 'blue', note: 'Awaiting secretary dispatch command to Production ERP.' },
-  ];
+  readonly released = signal<Batch[]>([]);
+  readonly loading = signal(true);
+  readonly busyId = signal<string | null>(null);
+  readonly error = signal<string | null>(null);
+
+  readonly stages = computed<StageCard[]>(() => [
+    { title: 'Analyst Verification', icon: 'shield', label: 'DIGITAL SIGNATURE', value: 'VERIFIED', valueTone: 'green', note: 'Signatures captured at each sign-off.' },
+    { title: 'Senior Analyst Review', icon: 'check', label: 'VERIFICATION STATUS', value: 'VERIFIED', valueTone: 'green', note: 'Results cross-checked before QC approval.' },
+    { title: 'QC Manager Approval', icon: 'clipboard', label: 'APPROVAL STATUS', value: 'COMPLETED', valueTone: 'green', note: 'Chemical and microbiological tests validated.' },
+    { title: 'Dispatch Readiness', icon: 'truck', label: 'BATCH QUEUE', value: `${this.released().length} PENDING`, valueTone: 'blue', note: 'Awaiting dispatch to production.' },
+  ]);
+
+  ngOnInit(): void {
+    this.load();
+  }
+
+  async load(): Promise<void> {
+    this.loading.set(true);
+    try {
+      this.released.set(await this.batches.listByStage('released'));
+    } catch (e) {
+      this.error.set(e instanceof Error ? e.message : 'Could not load approvals.');
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
+  async dispatch(batch: Batch): Promise<void> {
+    if (this.busyId()) return;
+    this.busyId.set(batch.id);
+    this.error.set(null);
+    try {
+      await this.batches.productionSignOff(batch.id);
+      this.released.update((list) => list.filter((b) => b.id !== batch.id));
+    } catch (e) {
+      this.error.set(e instanceof Error ? e.message : 'Could not dispatch the batch.');
+    } finally {
+      this.busyId.set(null);
+    }
+  }
+
+  approvalDate(b: Batch): string {
+    return (b.updated_at ?? '').slice(0, 10);
+  }
 }

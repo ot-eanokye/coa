@@ -1,4 +1,12 @@
 <section class="page">
+  <a class="back-link" [routerLink]="home()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6" />
+    </svg>
+    Back to dashboard
+  </a>
+
   <div class="page__head">
     <div>
       <h1 class="page__title">User Settings</h1>
@@ -18,7 +26,9 @@
         </svg>
         <h2>Profile Management</h2>
       </div>
-      <button class="btn btn--dark" type="button">Save Changes</button>
+      <button class="btn btn--dark" type="button" [disabled]="savingProfile()" (click)="saveProfile()">
+        {{ savingProfile() ? 'Saving…' : 'Save Changes' }}
+      </button>
     </div>
 
     <div class="card__body profile">
@@ -37,16 +47,19 @@
       <div class="profile__fields">
         <label class="field">
           <span class="field__label">FULL NAME</span>
-          <input type="text" value="Dr. Kwesi Appiah" />
+          <input type="text" name="fullName" [ngModel]="fullName()" (ngModelChange)="fullName.set($event)" />
         </label>
         <label class="field">
           <span class="field__label">PROFESSIONAL TITLE</span>
-          <input type="text" value="Administrator" />
+          <input type="text" name="title" [ngModel]="title()" (ngModelChange)="title.set($event)" />
         </label>
         <label class="field field--email">
           <span class="field__label">EMAIL ADDRESS</span>
-          <input type="email" value="k.appiah@ernestchemists.com" />
+          <input type="email" [value]="profile()?.email" readonly />
         </label>
+        @if (profileMessage()) {
+          <div class="profile__msg">{{ profileMessage() }}</div>
+        }
       </div>
     </div>
   </div>
@@ -92,12 +105,13 @@
         </span>
         <div class="setting__text">
           <span class="setting__title-row">
-            <span class="setting__title">Two-Factor Authentication (2FA)</span>
-            <span class="setting__badge">ENABLED</span>
+            <span class="setting__title">Digital Signature</span>
+            <span class="setting__badge" [class.setting__badge--off]="!currentSignature()">
+              {{ currentSignature() ? 'ON FILE' : 'NOT SET' }}
+            </span>
           </span>
-          <span class="setting__desc">Protected by Authenticator App (Google/Microsoft).</span>
+          <span class="setting__desc">Applied automatically to certificates when you sign off a batch.</span>
         </div>
-        <button class="btn btn--outline btn--outline-gray" type="button">Manage</button>
       </div>
     </div>
   </div>

@@ -82,7 +82,7 @@ export class UpdatePassword {
       this.newPassword.set('');
       this.confirmPassword.set('');
       setTimeout(() => {
-        this.router.navigateByUrl('/user-settings');
+        this.router.navigateByUrl('/settings');
       }, 1500);
     } catch (e) {
       this.message.set(e instanceof Error ? e.message : 'Could not update password.');
@@ -93,7 +93,7 @@ export class UpdatePassword {
   }
 
   onCancel(): void {
-    this.router.navigateByUrl('/user-settings');
+    this.router.navigateByUrl('/settings');
   }
 }
 

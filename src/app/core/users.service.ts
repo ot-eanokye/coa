@@ -28,6 +28,19 @@ export class UsersService {
     return (data ?? []) as Profile[];
   }
 
+  /** A single profile by id (admin-visible via RLS). */
+  async get(id: string): Promise<Profile> {
+    const { data, error } = await this.supabase.client
+      .from('profiles')
+      .select('*')
+      .eq('id', id)
+      .single<Profile>();
+    if (error) {
+      throw new Error(error.message);
+    }
+    return data;
+  }
+
   /** Activate / deactivate a user. */
   async setStatus(id: string, status: UserStatus): Promise<void> {
     const { error } = await this.supabase.client

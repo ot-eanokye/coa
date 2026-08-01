@@ -137,6 +137,24 @@ export class BatchService {
     return (data ?? []) as Batch[];
   }
 
+  /** Most-recently-updated batches across all stages (dashboards / activity). */
+  async listRecent(limit = 8): Promise<Batch[]> {
+    const { data, error } = await this.client
+      .from('batches')
+      .select('*')
+      .order('updated_at', { ascending: false })
+      .limit(limit);
+    if (error) throw new Error(error.message);
+    return (data ?? []) as Batch[];
+  }
+
+  /** Active analysts for assignment dropdowns. */
+  async listAnalysts(): Promise<{ id: string; full_name: string }[]> {
+    const { data, error } = await this.client.rpc('list_analysts');
+    if (error) throw new Error(error.message);
+    return (data ?? []) as { id: string; full_name: string }[];
+  }
+
   async countByStage(stage: BatchStage): Promise<number> {
     const { count, error } = await this.client
       .from('batches')
@@ -172,8 +190,16 @@ export class BatchService {
 
   // ---- Writes -------------------------------------------------------------
 
-  /** Analyst initializes a batch for a product; seeds result rows from its specs. */
-  async createBatch(productId: string, batchNo: string): Promise<Batch> {
+  /**
+   * Initialize a batch for a product; seeds result rows from its specs.
+   * Defaults to the signed-in analyst; pass `assignee` when a QC manager
+   * assigns the batch to a specific analyst.
+   */
+  async createBatch(
+    productId: string,
+    batchNo: string,
+    assignee?: { id: string; name: string },
+  ): Promise<Batch> {
     const profile = this.auth.profile();
     if (!profile) throw new Error('You must be signed in.');
     const { product, specs } = await this.products.get(productId);
@@ -189,8 +215,8 @@ export class BatchService {
         exp_date: product.exp_date,
         analysis_started: this.today(),
         stage: 'results_entry',
-        assigned_to: profile.id,
-        analyst_name: profile.full_name,
+        assigned_to: assignee?.id ?? profile.id,
+        analyst_name: assignee?.name ?? profile.full_name,
         created_by: profile.id,
       })
       .select('*')

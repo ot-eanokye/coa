@@ -120,6 +120,22 @@ export class AuthService {
     }
   }
 
+  /** Update editable fields on the signed-in user's own profile. */
+  async updateProfile(patch: { full_name?: string; title?: string }): Promise<void> {
+    const id = this._profile()?.id;
+    if (!id) {
+      throw new Error('You must be signed in.');
+    }
+    const { error } = await this.supabase.client.from('profiles').update(patch).eq('id', id);
+    if (error) {
+      throw new Error(error.message);
+    }
+    const current = this._profile();
+    if (current) {
+      this._profile.set({ ...current, ...patch });
+    }
+  }
+
   /** Update the signed-in user's password. */
   async updatePassword(currentPassword: string, newPassword: string): Promise<void> {
     if (!this._session()) {

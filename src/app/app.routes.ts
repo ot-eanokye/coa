@@ -19,6 +19,17 @@ export const routes: Routes = [
       import('./pages/coa-certificate/coa-certificate').then((m) => m.CoaCertificate),
   },
   {
+    path: 'settings',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/user-settings/user-settings').then((m) => m.UserSettings),
+  },
+  {
+    path: 'update-password',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/update-password/update-password').then((m) => m.UpdatePassword),
+  },
+  {
     path: 'analyst',
     component: AnalystShell,
     canActivate: [roleGuard('analyst')],
@@ -173,19 +184,9 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/create-user/create-user').then((m) => m.CreateUser),
       },
       {
-        path: 'users/reset-credentials',
+        path: 'users/reset-credentials/:id',
         loadComponent: () =>
           import('./pages/reset-credentials/reset-credentials').then((m) => m.ResetCredentials),
-      },
-      {
-        path: 'update-password',
-        loadComponent: () =>
-          import('./pages/update-password/update-password').then((m) => m.UpdatePassword),
-      },
-      {
-        path: 'settings',
-        loadComponent: () =>
-          import('./pages/user-settings/user-settings').then((m) => m.UserSettings),
       },
     ],
   },

@@ -1,33 +1,72 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { Batch as WBatch, BatchService, STAGE_LABEL } from '../../core/batch.service';
 
-interface Batch {
-  batchNumber: string;
-  product: string;
-  category: string;
-  stage: string;
-  assignedTo: string;
-  status: 'IN PROGRESS' | 'FLAGGED' | 'COMPLETED' | 'AWAITING REVIEW';
-}
+type Status = 'IN PROGRESS' | 'FLAGGED' | 'COMPLETED' | 'AWAITING REVIEW';
 
 @Component({
   selector: 'app-qc-queue',
   standalone: true,
+  imports: [RouterLink],
   templateUrl: './qc-queue.html',
   styleUrl: './qc-queue.scss',
 })
-export class QcQueue {
+export class QcQueue implements OnInit {
+  private readonly batchSvc = inject(BatchService);
+
   readonly tabs = ['All', 'Pending Entry', 'Under Review', 'Pending Approval'];
   readonly activeTab = signal('All');
 
-  readonly pages = [1, 2, 3];
+  readonly all = signal<WBatch[]>([]);
+  readonly released = signal<WBatch[]>([]);
+  readonly loading = signal(true);
 
-  readonly batches: Batch[] = [
-    { batchNumber: '0705C', product: 'Paracetamol Tablets 125mg/5ml', category: 'Tablets', stage: 'Results Entry', assignedTo: 'Benjamin Nottey', status: 'IN PROGRESS' },
-    { batchNumber: '0705C', product: 'Cough Syrup Base (Bulk)', category: 'Syrups', stage: 'Checking', assignedTo: 'J. Smith', status: 'FLAGGED' },
-    { batchNumber: '0705C', product: 'Amoxicillin Tablets 500mg', category: 'Tablets', stage: 'Approval', assignedTo: 'A. Mensah', status: 'COMPLETED' },
-    { batchNumber: '0705C', product: 'Vitamin C 500mg Chewables', category: 'Tablets', stage: 'Checking', assignedTo: 'J. Smith', status: 'AWAITING REVIEW' },
-    { batchNumber: '0705C', product: 'Paracetamol Syrup 125mg/5ml', category: 'Syrups', stage: 'Checking', assignedTo: 'R. Boateng', status: 'FLAGGED' },
-    { batchNumber: '0705C', product: 'Paracetamol Syrup 125mg/5ml', category: 'Syrups', stage: 'Results Entry', assignedTo: 'J. Smith', status: 'IN PROGRESS' },
-    { batchNumber: '0705C', product: 'Paracetamol Syrup 125mg/5ml', category: 'Syrups', stage: 'Checking', assignedTo: 'R. Boateng', status: 'FLAGGED' },
-  ];
+  readonly rows = computed(() => {
+    const tab = this.activeTab();
+    return this.all().filter((b) => {
+      if (tab === 'Pending Entry') return b.stage === 'results_entry';
+      if (tab === 'Under Review') return b.stage === 'senior_review';
+      if (tab === 'Pending Approval') return b.stage === 'qc_approval';
+      return true;
+    });
+  });
+
+  readonly totalActive = computed(() => this.pad(this.all().length));
+  readonly completed = computed(() => this.pad(this.released().length));
+  readonly pendingApproval = computed(() =>
+    this.pad(this.all().filter((b) => b.stage === 'qc_approval').length),
+  );
+
+  ngOnInit(): void {
+    Promise.all([this.batchSvc.listActive(), this.batchSvc.listReleased()])
+      .then(([active, released]) => {
+        this.all.set(active);
+        this.released.set(released);
+      })
+      .catch(() => {})
+      .finally(() => this.loading.set(false));
+  }
+
+  stageLabel(b: WBatch): string {
+    return STAGE_LABEL[b.stage];
+  }
+
+  status(b: WBatch): Status {
+    switch (b.stage) {
+      case 'rejected':
+        return 'FLAGGED';
+      case 'senior_review':
+      case 'qc_approval':
+        return 'AWAITING REVIEW';
+      case 'released':
+      case 'production_released':
+        return 'COMPLETED';
+      default:
+        return 'IN PROGRESS';
+    }
+  }
+
+  private pad(n: number): string {
+    return n < 10 ? `0${n}` : String(n);
+  }
 }

@@ -219,6 +219,27 @@
   background: var(--color-blue-dark);
 }
 
+.dispatch:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.cell-link {
+  color: var(--color-blue);
+  font-weight: 600;
+}
+
+.cell-link:hover {
+  text-decoration: underline;
+}
+
+.empty {
+  text-align: center;
+  color: var(--color-muted);
+  padding: 40px 20px;
+  font-size: 15px;
+}
+
 /* Footer */
 .panel__foot {
   display: flex;

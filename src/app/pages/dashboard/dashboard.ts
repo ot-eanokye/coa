@@ -1,20 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Batch, BatchService, STAGE_LABEL } from '../../core/batch.service';
 
 interface Operation {
   title: string;
   desc: string;
   icon: 'certificate' | 'approval' | 'retrieval';
   link: string;
-}
-
-interface Activity {
-  batchNo: string;
-  product: string;
-  date: string;
-  analyst: string;
-  status: 'RELEASED' | 'UNDER REVIEW' | 'OOS DETECTED';
-  action: 'pdf' | 'view' | 'alert';
 }
 
 @Component({
@@ -24,32 +16,40 @@ interface Activity {
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
-export class Dashboard {
+export class Dashboard implements OnInit {
+  private readonly batches = inject(BatchService);
+
+  readonly activity = signal<Batch[]>([]);
+  readonly loading = signal(true);
+
   readonly operations: Operation[] = [
-    {
-      title: 'Certificate Management',
-      desc: 'Maintain product profiles and specifications.',
-      icon: 'certificate',
-      link: '/products',
-    },
-    {
-      title: 'Approval Queue',
-      desc: 'Review and approve CoA reports for final release.',
-      icon: 'approval',
-      link: '/approvals',
-    },
-    {
-      title: 'Certificate Retrieval',
-      desc: 'Access and retrieve historical certificates across departments.',
-      icon: 'retrieval',
-      link: '/archived',
-    },
+    { title: 'Certificate Management', desc: 'Maintain product profiles and specifications.', icon: 'certificate', link: '/products' },
+    { title: 'Approval Queue', desc: 'Review and approve CoA reports for final release.', icon: 'approval', link: '/approvals' },
+    { title: 'Certificate Retrieval', desc: 'Access and retrieve historical certificates across departments.', icon: 'retrieval', link: '/archived' },
   ];
 
-  readonly activity: Activity[] = [
-    { batchNo: '0705C', product: 'Kidivite Syrup 200 ml', date: 'Oct 24, 2024', analyst: 'Dr. A. Mensah', status: 'RELEASED', action: 'pdf' },
-    { batchNo: '0705C', product: 'Kidivite Syrup 200 ml', date: 'Oct 24, 2024', analyst: 'S. Osei', status: 'UNDER REVIEW', action: 'view' },
-    { batchNo: '0705C', product: 'Kidivite Syrup 200 ml', date: 'Oct 23, 2024', analyst: 'Dr. A. Mensah', status: 'RELEASED', action: 'pdf' },
-    { batchNo: '0705C', product: 'Kidivite Syrup 200 ml', date: 'Oct 23, 2024', analyst: 'K. Appiah', status: 'OOS DETECTED', action: 'alert' },
-  ];
+  ngOnInit(): void {
+    this.batches
+      .listRecent(8)
+      .then((b) => this.activity.set(b))
+      .catch(() => this.activity.set([]))
+      .finally(() => this.loading.set(false));
+  }
+
+  stageLabel(b: Batch): string {
+    return STAGE_LABEL[b.stage];
+  }
+
+  statusTone(b: Batch): 'released' | 'review' | 'oos' {
+    if (b.stage === 'released' || b.stage === 'production_released') return 'released';
+    if (b.stage === 'rejected') return 'oos';
+    return 'review';
+  }
+
+  date(b: Batch): string {
+    const d = new Date(b.updated_at);
+    return isNaN(d.getTime())
+      ? ''
+      : new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(d);
+  }
 }
