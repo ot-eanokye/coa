@@ -1,4 +1,5 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Batch, BatchService } from '../../core/batch.service';
 
@@ -14,7 +15,7 @@ interface StageCard {
 @Component({
   selector: 'app-approval-queue',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, FormsModule],
   templateUrl: './approval-queue.html',
   styleUrl: './approval-queue.scss',
 })
@@ -25,6 +26,19 @@ export class ApprovalQueue implements OnInit {
   readonly loading = signal(true);
   readonly busyId = signal<string | null>(null);
   readonly error = signal<string | null>(null);
+  readonly query = signal('');
+  readonly category = signal('');
+
+  readonly categories = computed(() => [...new Set(this.released().map((b) => b.category).filter(Boolean))]);
+  readonly filtered = computed(() => {
+    const q = this.query().trim().toLowerCase();
+    const c = this.category();
+    return this.released().filter(
+      (b) =>
+        (!c || b.category === c) &&
+        (!q || [b.batch_no, b.product_name, b.analyst_name].some((v) => v?.toLowerCase().includes(q))),
+    );
+  });
 
   readonly stages = computed<StageCard[]>(() => [
     { title: 'Analyst Verification', icon: 'shield', label: 'DIGITAL SIGNATURE', value: 'VERIFIED', valueTone: 'green', note: 'Signatures captured at each sign-off.' },

@@ -156,6 +156,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/add-product/add-product').then((m) => m.AddProduct),
       },
       {
+        path: 'products/:id/edit',
+        loadComponent: () => import('./pages/add-product/add-product').then((m) => m.AddProduct),
+      },
+      {
         path: 'products/new/upload',
         loadComponent: () =>
           import('./pages/import-product/import-product').then((m) => m.ImportProduct),

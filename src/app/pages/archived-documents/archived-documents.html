@@ -31,11 +31,11 @@
       <div class="filters__field">
         <span class="filters__label">Category</span>
         <div class="select">
-          <select>
-            <option>All Categories</option>
-            <option>Syrup</option>
-            <option>Tablet</option>
-            <option>Capsule</option>
+          <select name="cat" [ngModel]="category()" (ngModelChange)="category.set($event)">
+            <option value="">All Categories</option>
+            @for (c of categories(); track c) {
+              <option [value]="c">{{ c }}</option>
+            }
           </select>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -46,10 +46,10 @@
       <div class="filters__field">
         <span class="filters__label">Release Status</span>
         <div class="select">
-          <select>
-            <option>All Statuses</option>
-            <option>Released</option>
-            <option>Rejected</option>
+          <select name="status" [ngModel]="status()" (ngModelChange)="status.set($event)">
+            <option value="">All Statuses</option>
+            <option value="Released">Released</option>
+            <option value="Rejected">Rejected</option>
           </select>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -65,15 +65,15 @@
       <div class="dates">
         <label class="date">
           <span>From:</span>
-          <input type="text" placeholder="mm/dd/yyyy" onfocus="(this.type='date')" onblur="if(!this.value)this.type='text'" />
+          <input type="date" name="from" [ngModel]="dateFrom()" (ngModelChange)="dateFrom.set($event)" />
         </label>
         <label class="date">
           <span>To:</span>
-          <input type="text" placeholder="mm/dd/yyyy" onfocus="(this.type='date')" onblur="if(!this.value)this.type='text'" />
+          <input type="date" name="to" [ngModel]="dateTo()" (ngModelChange)="dateTo.set($event)" />
         </label>
       </div>
       <div class="filters__actions">
-        <a class="filters__clear" href="#" (click)="$event.preventDefault()">Clear All Filters</a>
+        <a class="filters__clear" href="#" (click)="$event.preventDefault(); clearFilters()">Clear All Filters</a>
         <button class="btn btn--blue" type="button">Apply Search Filters</button>
       </div>
     </div>

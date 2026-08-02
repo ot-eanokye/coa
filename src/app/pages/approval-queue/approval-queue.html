@@ -12,17 +12,18 @@
           <circle cx="11" cy="11" r="8" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
-        <input type="text" placeholder="e.g. B2024-882 or Paracetamol" />
+        <input type="text" placeholder="e.g. B2024-882 or Paracetamol" name="q"
+          [ngModel]="query()" (ngModelChange)="query.set($event)" />
       </div>
     </div>
     <div class="filters__field">
       <span class="filters__label">CATEGORY</span>
       <div class="select">
-        <select>
-          <option>All Categories</option>
-          <option>Syrup</option>
-          <option>Tablet</option>
-          <option>Capsule</option>
+        <select name="cat" [ngModel]="category()" (ngModelChange)="category.set($event)">
+          <option value="">All Categories</option>
+          @for (c of categories(); track c) {
+            <option [value]="c">{{ c }}</option>
+          }
         </select>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -55,7 +56,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (row of released(); track row.id) {
+        @for (row of filtered(); track row.id) {
           <tr>
             <td class="cell-mono"><a class="cell-link" [routerLink]="['/coa', row.id]">{{ row.batch_no }}</a></td>
             <td class="cell-strong">{{ row.product_name }}</td>
@@ -78,7 +79,7 @@
     </table>
 
     <div class="panel__foot">
-      <span class="panel__count">Showing {{ released().length }} pending approvals</span>
+      <span class="panel__count">Showing {{ filtered().length }} pending approvals</span>
     </div>
   </div>
 

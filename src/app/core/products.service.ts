@@ -111,6 +111,39 @@ export class ProductsService {
     return product;
   }
 
+  async update(id: string, input: Omit<NewProduct, never>): Promise<void> {
+    const { error } = await this.supabase.client
+      .from('products')
+      .update({
+        name: input.name,
+        category: input.category,
+        batch_no: input.batch_no || null,
+        mfg_date: input.mfg_date || null,
+        exp_date: input.exp_date || null,
+        active_ingredients: input.active_ingredients || null,
+      })
+      .eq('id', id);
+    if (error) {
+      throw new Error(error.message);
+    }
+    // Replace the spec set.
+    await this.supabase.client.from('product_specifications').delete().eq('product_id', id);
+    if (input.specs.length) {
+      const rows = input.specs.map((s, i) => ({
+        product_id: id,
+        parameter: s.parameter,
+        spec_range: s.spec_range,
+        sort_order: i,
+      }));
+      const { error: specErr } = await this.supabase.client
+        .from('product_specifications')
+        .insert(rows);
+      if (specErr) {
+        throw new Error(specErr.message);
+      }
+    }
+  }
+
   async setStatus(id: string, status: ProductStatus): Promise<void> {
     const { error } = await this.supabase.client
       .from('products')

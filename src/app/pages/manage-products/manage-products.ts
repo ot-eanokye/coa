@@ -25,6 +25,7 @@ export class ManageProducts implements OnInit {
   readonly tabs = ['All Products', 'Syrups', 'Tablets', 'Capsules', 'Suspensions'];
   readonly activeTab = signal('All Products');
   readonly query = signal('');
+  readonly sort = signal('Recently Updated');
 
   readonly products = signal<Product[]>([]);
   readonly loading = signal(true);
@@ -35,7 +36,7 @@ export class ManageProducts implements OnInit {
   readonly filtered = computed(() => {
     const tab = this.activeTab();
     const q = this.query().trim().toLowerCase();
-    return this.products().filter((p) => {
+    const rows = this.products().filter((p) => {
       const tabOk = tab === 'All Products' || p.category.toLowerCase() === TAB_CATEGORY[tab];
       const qOk =
         !q ||
@@ -43,6 +44,12 @@ export class ManageProducts implements OnInit {
           .filter(Boolean)
           .some((v) => v!.toLowerCase().includes(q));
       return tabOk && qOk;
+    });
+    const sort = this.sort();
+    return [...rows].sort((a, b) => {
+      if (sort === 'Product Name') return a.name.localeCompare(b.name);
+      if (sort === 'Category') return a.category.localeCompare(b.category);
+      return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
     });
   });
 

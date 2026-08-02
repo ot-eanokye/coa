@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Batch, BatchService, STAGE_LABEL } from '../../core/batch.service';
 
@@ -12,7 +13,7 @@ interface Operation {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, FormsModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
@@ -21,6 +22,15 @@ export class Dashboard implements OnInit {
 
   readonly activity = signal<Batch[]>([]);
   readonly loading = signal(true);
+  readonly query = signal('');
+
+  readonly filteredActivity = computed(() => {
+    const q = this.query().trim().toLowerCase();
+    if (!q) return this.activity();
+    return this.activity().filter((b) =>
+      [b.batch_no, b.product_name, b.analyst_name].filter(Boolean).some((v) => v!.toLowerCase().includes(q)),
+    );
+  });
 
   readonly operations: Operation[] = [
     { title: 'Certificate Management', desc: 'Maintain product profiles and specifications.', icon: 'certificate', link: '/products' },

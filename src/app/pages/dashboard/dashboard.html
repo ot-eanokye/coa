@@ -11,7 +11,8 @@
           <circle cx="11" cy="11" r="8" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
-        <input type="text" placeholder="Search Batch ID or Product Name..." />
+        <input type="text" placeholder="Search Batch ID or Product Name..." name="q"
+          [ngModel]="query()" (ngModelChange)="query.set($event)" />
       </div>
       <button class="btn btn--dark" type="button">Search CoA</button>
     </div>
@@ -92,7 +93,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (row of activity(); track row.id) {
+        @for (row of filteredActivity(); track row.id) {
           <tr>
             <td class="cell-mono cell-center">{{ row.batch_no }}</td>
             <td class="cell-mono cell-strong">{{ row.product_name }}</td>

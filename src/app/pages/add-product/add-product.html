@@ -3,7 +3,7 @@
     <nav class="breadcrumb">
       <a class="breadcrumb__muted" routerLink="/products">Manage Products</a>
       <span class="breadcrumb__sep">&rsaquo;</span>
-      <span class="breadcrumb__current">Add New Product</span>
+      <span class="breadcrumb__current">{{ editId() ? 'Edit Product' : 'Add New Product' }}</span>
     </nav>
     <button class="btn btn--upload" type="button" [routerLink]="'/products/new/upload'">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -16,7 +16,7 @@
     </button>
   </div>
 
-  <h1 class="page__title">Add New Product</h1>
+  <h1 class="page__title">{{ editId() ? 'Edit Product' : 'Add New Product' }}</h1>
   <p class="page__subtitle">Initialize a new product record with pharmaceutical specifications and release
     protocols.</p>
 
@@ -34,7 +34,7 @@
     <div class="section-bar__actions">
       <button class="btn btn--cancel" type="button" routerLink="/products" [disabled]="saving()">Cancel</button>
       <button class="btn btn--save" type="button" (click)="onSubmit()" [disabled]="saving()">
-        {{ saving() ? 'Saving…' : 'Save Product' }}
+        {{ saving() ? 'Saving…' : (editId() ? 'Update Product' : 'Save Product') }}
       </button>
     </div>
   </div>

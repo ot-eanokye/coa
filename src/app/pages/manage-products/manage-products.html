@@ -42,7 +42,7 @@
     <div class="sort">
       <span class="sort__label">Sort by:</span>
       <div class="select">
-        <select>
+        <select name="sort" [ngModel]="sort()" (ngModelChange)="sort.set($event)">
           <option>Recently Updated</option>
           <option>Product Name</option>
           <option>Category</option>
@@ -108,13 +108,14 @@
             </td>
             <td>
               <div class="actions">
-                <button class="act act--view" aria-label="View" type="button">
+                <a class="act act--view" aria-label="Edit" title="Edit"
+                  [routerLink]="['/products', product.id, 'edit']">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                     stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" />
-                    <circle cx="12" cy="12" r="3" />
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z" />
                   </svg>
-                </button>
+                </a>
                 @if (product.status === 'active') {
                   <button class="act act--archive" aria-label="Archive" type="button"
                     [disabled]="busyId() === product.id" (click)="toggleStatus(product)">
