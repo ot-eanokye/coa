@@ -56,6 +56,38 @@
   gap: 18px;
 }
 
+.topbar__notif {
+  position: relative;
+  display: inline-flex;
+}
+
+.notif-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 260px;
+  background: var(--color-white, #fff);
+  color: #111418;
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  z-index: 40;
+}
+
+.notif-panel__head {
+  padding: 12px 16px;
+  font-weight: 700;
+  font-size: 14px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.notif-panel__empty {
+  padding: 18px 16px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
 .topbar__icon-btn {
   background: transparent;
   border: none;

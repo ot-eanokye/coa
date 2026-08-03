@@ -8,7 +8,6 @@ const TAB_CATEGORY: Record<string, string> = {
   Syrups: 'syrup',
   Tablets: 'tablet',
   Capsules: 'capsule',
-  Suspensions: 'suspension',
 };
 
 @Component({
@@ -22,7 +21,7 @@ export class ManageProducts implements OnInit {
   private readonly productsService = inject(ProductsService);
   private readonly route = inject(ActivatedRoute);
 
-  readonly tabs = ['All Products', 'Syrups', 'Tablets', 'Capsules', 'Suspensions'];
+  readonly tabs = ['All Products', 'Syrups', 'Tablets', 'Capsules'];
   readonly activeTab = signal('All Products');
   readonly query = signal('');
   readonly sort = signal('Recently Updated');

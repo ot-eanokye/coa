@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { UsersService } from '../../core/users.service';
-import { ROLE_OPTIONS, UserRole } from '../../core/models';
+import { ROLE_LABELS, ROLE_OPTIONS, UserRole } from '../../core/models';
 
 @Component({
   selector: 'app-create-user',
@@ -28,6 +28,14 @@ export class CreateUser {
 
   readonly saving = signal(false);
   readonly error = signal<string | null>(null);
+
+  onRoleChange(value: UserRole | ''): void {
+    this.role.set(value);
+    // Auto-fill the professional title from the role unless the user typed their own.
+    if (value && (!this.title().trim() || ROLE_OPTIONS.some((o) => o.label === this.title()))) {
+      this.title.set(ROLE_LABELS[value]);
+    }
+  }
 
   generatePassword(): void {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';

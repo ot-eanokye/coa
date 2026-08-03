@@ -30,6 +30,32 @@ export class AddProduct implements OnInit {
 
   readonly specs = signal<SpecInput[]>([]);
 
+  readonly editIndex = signal<number | null>(null);
+  readonly editParameter = signal('');
+  readonly editRange = signal('');
+
+  startEdit(index: number): void {
+    const row = this.specs()[index];
+    this.editParameter.set(row.parameter);
+    this.editRange.set(row.spec_range);
+    this.editIndex.set(index);
+  }
+
+  saveEdit(): void {
+    const i = this.editIndex();
+    if (i === null) return;
+    const parameter = this.editParameter().trim();
+    const spec_range = this.editRange().trim();
+    if (parameter) {
+      this.specs.update((list) => list.map((r, idx) => (idx === i ? { parameter, spec_range } : r)));
+    }
+    this.editIndex.set(null);
+  }
+
+  cancelEdit(): void {
+    this.editIndex.set(null);
+  }
+
   async ngOnInit(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) return;

@@ -18,7 +18,6 @@ export class BatchInitialization implements OnInit {
 
   readonly productList = signal<Product[]>([]);
   readonly selectedId = signal('');
-  readonly batchNo = signal('');
   readonly specs = signal<SpecInput[]>([]);
 
   readonly loading = signal(true);
@@ -66,13 +65,10 @@ export class BatchInitialization implements OnInit {
       this.error.set('Select a product to analyse.');
       return;
     }
-    if (!this.batchNo().trim()) {
-      this.error.set('Enter a batch number.');
-      return;
-    }
     this.creating.set(true);
     try {
-      const batch = await this.batches.createBatch(this.selectedId(), this.batchNo().trim());
+      // Batch number is taken from the selected product's record.
+      const batch = await this.batches.createBatch(this.selectedId(), this.selected()?.batch_no ?? '');
       await this.router.navigate(['/analyst/batch', batch.id, 'results']);
     } catch (e) {
       this.error.set(e instanceof Error ? e.message : 'Could not start the analysis.');

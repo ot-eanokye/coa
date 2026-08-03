@@ -39,7 +39,7 @@
         <label class="field">
           <span class="field__label">ROLE</span>
           <div class="select">
-            <select name="role" [ngModel]="role()" (ngModelChange)="role.set($event)">
+            <select name="role" [ngModel]="role()" (ngModelChange)="onRoleChange($event)">
               <option value="" disabled>Select a role…</option>
               @for (opt of roleOptions; track opt.value) {
                 <option [value]="opt.value">{{ opt.label }}</option>

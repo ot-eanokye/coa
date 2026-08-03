@@ -392,6 +392,40 @@
   background: #2b8c3d;
 }
 
+.finalize__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--color-white);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-blue, #1d4ed8);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0;
+  margin-bottom: 14px;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 900px) {
   .page {
     padding: 24px 18px 48px;

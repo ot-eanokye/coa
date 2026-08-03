@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs';
@@ -33,6 +33,12 @@ export class Header {
   readonly userRole = input<string>('ADMINISTRATOR');
   readonly avatarInitials = input<string>('AT');
   readonly showMeta = input<boolean>(true);
+
+  readonly notifOpen = signal(false);
+
+  toggleNotif(): void {
+    this.notifOpen.update((v) => !v);
+  }
 
   /** Prefer the real signed-in profile; fall back to the static inputs. */
   readonly displayName = computed(() => this.auth.profile()?.full_name || this.userName());

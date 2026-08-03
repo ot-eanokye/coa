@@ -31,7 +31,7 @@ export class ImportProduct {
   readonly composition = signal('');
   readonly specs = signal<ExtractedSpec[]>([]);
 
-  readonly categories = ['Syrup', 'Tablet', 'Capsule', 'Suspension'];
+  readonly categories = ['Syrup', 'Tablet', 'Capsule'];
 
   onDragOver(e: DragEvent): void {
     e.preventDefault();

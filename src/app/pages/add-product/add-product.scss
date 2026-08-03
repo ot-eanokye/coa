@@ -292,14 +292,33 @@
   border: none;
   display: inline-flex;
   padding: 2px;
+  cursor: pointer;
 }
 
 .act--edit {
   color: var(--color-blue);
 }
 
+.act--save {
+  color: #2f9e44;
+}
+
 .act--del {
   color: #dc2626;
+}
+
+.spec-input {
+  width: 100%;
+  border: 1px solid var(--color-border, #d0d5dd);
+  border-radius: var(--radius-sm, 6px);
+  padding: 8px 10px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.spec-input:focus {
+  outline: none;
+  border-color: var(--color-blue, #1d4ed8);
 }
 
 @media (max-width: 1000px) {
