@@ -68,6 +68,15 @@ export class CoaCertificate implements OnInit {
 
   readonly categoryLabel = computed(() => (this.batch()?.category ?? '').toUpperCase());
 
+  /** Tests that carry sub-tests render as headers rather than result rows. */
+  readonly groupNames = computed(
+    () => new Set(this.results().filter((r) => r.parent).map((r) => r.parent as string)),
+  );
+
+  isGroupHeader(row: BatchResult): boolean {
+    return !row.parent && this.groupNames().has(row.parameter);
+  }
+
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id') ?? '';
     this.load();

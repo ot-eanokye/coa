@@ -71,6 +71,12 @@
       <div class="coa-product__bottom">
         <div class="coa-product__batch">BATCH NO.: {{ batch()?.batch_no }}</div>
         <table class="coa-meta">
+          @if (batch()?.code) {
+            <tr>
+              <th>PRODUCT CODE</th>
+              <td>{{ batch()?.code }}</td>
+            </tr>
+          }
           <tr>
             <th>DATE OF MFG.</th>
             <td>{{ batch()?.mfg_date || '' }}</td>
@@ -103,11 +109,11 @@
       </thead>
       <tbody>
         @for (row of results(); track row.id; let i = $index) {
-          <tr>
+          <tr [class.c-row--group]="isGroupHeader(row)" [class.c-row--sub]="row.parent">
             <td class="c-no">{{ i + 1 }}.</td>
             <td class="c-test">{{ row.parameter }}</td>
             <td class="c-spec">{{ row.specification }}</td>
-            <td class="c-res">{{ row.result_value }}</td>
+            <td class="c-res">{{ isGroupHeader(row) ? '' : row.result_value }}</td>
           </tr>
         } @empty {
           <tr>

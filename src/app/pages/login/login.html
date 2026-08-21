@@ -56,7 +56,6 @@
         <label class="field">
           <span class="field__label-row">
             <span class="field__label">PASSWORD</span>
-            <a class="field__link" href="#" (click)="$event.preventDefault()">Forgot Password?</a>
           </span>
           <span class="field__control">
             <svg
@@ -102,15 +101,6 @@
             </button>
           </span>
         </label>
-
-        <label class="checkbox">
-          <input type="checkbox" />
-          <span>Remember me on this device</span>
-        </label>
-
-        <p class="auth__support">
-          Need technical support? <a href="#" (click)="$event.preventDefault()">CONTACT IT ADMIN</a>
-        </p>
 
         @if (error()) {
           <div class="auth__error" role="alert">
@@ -160,11 +150,5 @@
       <span class="login__footer-brand">ERNEST CHEMISTS</span>
       <span class="login__footer-copy">© 2024 Ernest Chemists Limited. All rights reserved.</span>
     </div>
-    <nav class="login__footer-links">
-      <a href="#" (click)="$event.preventDefault()">Privacy Policy</a>
-      <a href="#" (click)="$event.preventDefault()">Terms of Service</a>
-      <a href="#" (click)="$event.preventDefault()">Security Standards</a>
-      <a href="#" (click)="$event.preventDefault()">Contact Support</a>
-    </nav>
   </footer>
 </div>

@@ -17,6 +17,7 @@ export interface Batch {
   product_id: string | null;
   product_name: string;
   category: string | null;
+  code: string | null;
   mfg_date: string | null;
   exp_date: string | null;
   analysis_started: string | null;
@@ -36,6 +37,7 @@ export interface BatchResult {
   specification: string | null;
   result_value: string | null;
   status: 'pending' | 'pass' | 'fail';
+  parent: string | null;
   sort_order: number;
 }
 
@@ -211,6 +213,7 @@ export class BatchService {
         product_id: product.id,
         product_name: product.name,
         category: product.category,
+        code: product.code,
         mfg_date: product.mfg_date,
         exp_date: product.exp_date,
         analysis_started: this.today(),
@@ -228,6 +231,7 @@ export class BatchService {
         batch_id: batch.id,
         parameter: s.parameter,
         specification: s.spec_range,
+        parent: s.parent ?? null,
         sort_order: i,
       }));
       const { error: rErr } = await this.client.from('batch_results').insert(rows);

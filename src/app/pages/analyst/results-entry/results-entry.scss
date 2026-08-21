@@ -157,6 +157,19 @@
   pointer-events: none;
 }
 
+.date-input--readonly {
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  padding: 13px 42px 13px 16px;
+  background: #f8fafc;
+}
+
+.date-input--readonly span {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: var(--color-text);
+}
+
 /* Test results card */
 .card {
   border: 1px solid var(--color-border);
@@ -287,6 +300,67 @@
   color: #6b7280;
 }
 
+/* Pass / Fail segmented control */
+.mark {
+  display: inline-flex;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+.mark__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  background: var(--color-white);
+  color: #6b7280;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.mark__btn svg {
+  opacity: 0.55;
+}
+
+.mark__btn:first-child {
+  border-right: 1px solid var(--color-border-strong);
+}
+
+.mark__btn--pass:hover:not(:disabled) {
+  background: #ecfdf3;
+  color: #22a06b;
+}
+
+.mark__btn--fail:hover:not(:disabled) {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.mark__btn--pass.is-active {
+  background: #22a06b;
+  color: var(--color-white);
+}
+
+.mark__btn--fail.is-active {
+  background: #dc2626;
+  color: var(--color-white);
+}
+
+.mark__btn.is-active svg {
+  opacity: 1;
+}
+
+.mark__btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .banner {
   border-radius: var(--radius-md);
   padding: 12px 16px;
@@ -406,6 +480,20 @@
 
 .btn--ghost:hover {
   background: rgba(255, 255, 255, 0.08);
+}
+
+.row--group .strong {
+  font-weight: 700;
+}
+
+.row--sub .strong {
+  padding-left: 22px;
+  font-weight: 500;
+}
+
+.sub-mark {
+  color: #98a2b3;
+  margin-right: 4px;
 }
 
 .back-link {

@@ -307,6 +307,16 @@
   color: #dc2626;
 }
 
+.spec-row--sub .spec-name {
+  padding-left: 26px;
+  color: #475467;
+}
+
+.spec-sub-mark {
+  color: #98a2b3;
+  margin-right: 4px;
+}
+
 .spec-input {
   width: 100%;
   border: 1px solid var(--color-border, #d0d5dd);

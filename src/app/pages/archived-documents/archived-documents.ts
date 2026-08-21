@@ -41,6 +41,31 @@ export class ArchivedDocuments implements OnInit {
     });
   });
 
+  exportCsv(): void {
+    const header = ['Batch Number', 'Product Name', 'MFG Date', 'EXP Date', 'Release Date', 'Status'];
+    const esc = (v: string) => `"${(v ?? '').replace(/"/g, '""')}"`;
+    const lines = this.rows().map((b) =>
+      [
+        b.batch_no,
+        b.product_name,
+        b.mfg_date ?? '',
+        b.exp_date ?? '',
+        this.releaseDate(b),
+        this.isRejected(b) ? 'REJECTED' : 'RELEASED',
+      ]
+        .map((v) => esc(String(v)))
+        .join(','),
+    );
+    const csv = [header.map(esc).join(','), ...lines].join('\r\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `coa-records-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   clearFilters(): void {
     this.query.set('');
     this.category.set('');

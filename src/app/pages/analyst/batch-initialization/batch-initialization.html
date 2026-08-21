@@ -41,7 +41,7 @@
           <div class="select">
             <select [ngModel]="selectedId()" (ngModelChange)="onSelect($event)" name="product">
               <option value="">
-                {{ loading() ? 'Loading products…' : 'Select a product…' }}
+                {{ loading() ? 'Loading products…' : (productList().length ? 'Select a product…' : 'No products assigned to you yet') }}
               </option>
               @for (p of productList(); track p.id) {
                 <option [value]="p.id">{{ p.name }} — {{ p.category }}</option>

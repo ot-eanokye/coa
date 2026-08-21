@@ -266,6 +266,15 @@
   font-weight: 600;
 }
 
+.c-row--group .c-test {
+  font-weight: 700;
+}
+
+.c-row--sub .c-test {
+  padding-left: 18px;
+  font-weight: 500;
+}
+
 .c-res {
   width: 30%;
   font-family: var(--font-mono);

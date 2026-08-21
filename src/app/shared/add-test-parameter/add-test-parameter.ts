@@ -9,6 +9,8 @@ interface SubTest {
 export interface ParameterRow {
   parameter: string;
   spec_range: string;
+  /** Null for a top-level test; the parent test's name for a sub-test. */
+  parent?: string | null;
 }
 
 @Component({
@@ -44,11 +46,12 @@ export class AddTestParameter {
     const rows: ParameterRow[] = [];
     const name = this.testName().trim();
     if (name) {
-      rows.push({ parameter: name, spec_range: this.standardRange().trim() });
+      rows.push({ parameter: name, spec_range: this.standardRange().trim(), parent: null });
     }
     for (const sub of this.subTests()) {
       if (sub.name.trim()) {
-        rows.push({ parameter: sub.name.trim(), spec_range: sub.range.trim() });
+        // Hang the sub-test under the parent test by name.
+        rows.push({ parameter: sub.name.trim(), spec_range: sub.range.trim(), parent: name || null });
       }
     }
     this.saved.emit(rows);

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Location, UpperCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,6 +10,7 @@ interface EditableResult {
   specification: string | null;
   result_value: string;
   status: BatchResult['status'];
+  parent: string | null;
 }
 
 @Component({
@@ -34,6 +35,15 @@ export class ResultsEntry implements OnInit {
   readonly saving = signal(false);
   readonly error = signal<string | null>(null);
 
+  /** Names of tests that have sub-tests — these act as group headers, not result rows. */
+  readonly groupNames = computed(
+    () => new Set(this.rows().filter((r) => r.parent).map((r) => r.parent as string)),
+  );
+
+  isGroupHeader(row: EditableResult): boolean {
+    return !row.parent && this.groupNames().has(row.parameter);
+  }
+
   private id = '';
 
   ngOnInit(): void {
@@ -56,6 +66,7 @@ export class ResultsEntry implements OnInit {
           specification: r.specification,
           result_value: r.result_value ?? '',
           status: r.status,
+          parent: r.parent,
         })),
       );
     } catch (e) {
@@ -69,53 +80,21 @@ export class ResultsEntry implements OnInit {
     this.rows.update((list) =>
       list.map((r) => {
         if (r.id !== id) return r;
-        // No result entered → always pending.
-        if (!value.trim()) return { ...r, result_value: value, status: 'pending' };
-        // Auto-evaluate numeric specs; leave text specs for manual toggle.
-        const auto = this.evaluate(r.specification, value);
-        return { ...r, result_value: value, status: auto ?? r.status };
+        // Clearing the result clears the analyst's mark; otherwise leave it untouched.
+        return { ...r, result_value: value, status: value.trim() ? r.status : 'pending' };
       }),
     );
   }
 
-  cycleStatus(id: string): void {
-    const next: Record<BatchResult['status'], BatchResult['status']> = {
-      pending: 'pass',
-      pass: 'fail',
-      fail: 'pending',
-    };
+  /** Analyst explicitly marks a result. Click the active choice again to clear it. */
+  setStatus(id: string, status: 'pass' | 'fail'): void {
     this.rows.update((list) =>
       list.map((r) => {
-        // Only allow a manual status change once a result has been entered.
+        // A result must be entered before it can be marked.
         if (r.id !== id || !r.result_value.trim()) return r;
-        return { ...r, status: next[r.status] };
+        return { ...r, status: r.status === status ? 'pending' : status };
       }),
     );
-  }
-
-  /**
-   * Compare a numeric result against a specification range/bound.
-   * Returns 'pass'/'fail', or null when the spec is non-numeric (manual check).
-   */
-  private evaluate(spec: string | null, value: string): 'pass' | 'fail' | null {
-    if (!spec) return null;
-    const num = parseFloat(value.replace(/[^0-9.\-]/g, ''));
-    if (isNaN(num)) return null;
-    const nums = (spec.match(/-?\d+(\.\d+)?/g) ?? []).map(Number);
-    const s = spec.toLowerCase();
-    // Range: "a - b", "a to b", "a–b"
-    if (nums.length >= 2 && /(-|–|to)/.test(s)) {
-      const [a, b] = [nums[0], nums[1]].sort((x, y) => x - y);
-      return num >= a && num <= b ? 'pass' : 'fail';
-    }
-    if (nums.length >= 1) {
-      const a = nums[0];
-      if (/(≥|>=|nlt|not less than|min|minimum)/.test(s)) return num >= a ? 'pass' : 'fail';
-      if (/(≤|<=|nmt|not more than|max|maximum)/.test(s)) return num <= a ? 'pass' : 'fail';
-      if (/>/.test(s)) return num > a ? 'pass' : 'fail';
-      if (/</.test(s)) return num < a ? 'pass' : 'fail';
-    }
-    return null;
   }
 
   back(): void {

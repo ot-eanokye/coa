@@ -31,6 +31,7 @@ export class QcAssign implements OnInit {
   readonly messageType = signal<'ok' | 'err'>('ok');
 
   readonly categories = computed(() => [...new Set(this.productList().map((p) => p.category))]);
+  readonly selectedProduct = computed(() => this.productList().find((p) => p.id === this.productId()) ?? null);
   readonly filteredProducts = computed(() => {
     const c = this.category();
     return c ? this.productList().filter((p) => p.category === c) : this.productList();

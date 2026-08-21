@@ -82,3 +82,22 @@ a {
 .mono {
   font-family: var(--font-mono);
 }
+
+/* Consistent sub-page back navigation */
+.back-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-blue, #1d4ed8);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0;
+  margin-bottom: 16px;
+}
+
+.back-nav:hover {
+  text-decoration: underline;
+}

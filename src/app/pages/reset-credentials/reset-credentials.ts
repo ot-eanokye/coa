@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
 import { UsersService } from '../../core/users.service';
 import { Profile, ROLE_LABELS } from '../../core/models';
@@ -7,6 +7,7 @@ import { Profile, ROLE_LABELS } from '../../core/models';
 @Component({
   selector: 'app-reset-credentials',
   standalone: true,
+  imports: [RouterLink],
   templateUrl: './reset-credentials.html',
   styleUrl: './reset-credentials.scss',
 })

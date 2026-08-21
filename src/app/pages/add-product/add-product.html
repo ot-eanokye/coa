@@ -154,8 +154,13 @@
             </td>
           </tr>
         } @else {
-          <tr>
-            <td class="spec-name">{{ row.parameter }}</td>
+          <tr [class.spec-row--sub]="row.parent">
+            <td class="spec-name">
+              @if (row.parent) {
+                <span class="spec-sub-mark">└</span>
+              }
+              {{ row.parameter }}
+            </td>
             <td class="spec-range">{{ row.spec_range }}</td>
             <td class="col-action">
               <div class="row-actions">

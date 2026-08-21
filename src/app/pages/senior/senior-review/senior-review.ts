@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { UpperCasePipe } from '@angular/common';
+import { Location, UpperCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Batch, BatchEvent, BatchResult, BatchService } from '../../../core/batch.service';
@@ -16,7 +16,12 @@ import { SignatureModal } from '../../../shared/signature-modal/signature-modal'
 export class SeniorReview implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly location = inject(Location);
   private readonly batches = inject(BatchService);
+
+  back(): void {
+    this.location.back();
+  }
   private readonly auth = inject(AuthService);
 
   readonly batch = signal<Batch | null>(null);

@@ -41,6 +41,15 @@
         </div>
       </label>
 
+      @if (selectedProduct(); as p) {
+        <label class="field">
+          <span class="field__label">Product Code</span>
+          <div class="input-icon">
+            <input type="text" name="code" [value]="p.code || '—'" readonly />
+          </div>
+        </label>
+      }
+
       <label class="field">
         <span class="field__label">Batch Number</span>
         <div class="input-icon">

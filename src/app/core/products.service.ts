@@ -20,6 +20,8 @@ export interface Product {
 export interface SpecInput {
   parameter: string;
   spec_range: string;
+  /** Null for a top-level test; the parent test's name for a sub-test. */
+  parent?: string | null;
 }
 
 export interface NewProduct {
@@ -69,7 +71,7 @@ export class ProductsService {
     }
     const { data: specs } = await this.supabase.client
       .from('product_specifications')
-      .select('parameter, spec_range')
+      .select('parameter, spec_range, parent')
       .eq('product_id', id)
       .order('sort_order', { ascending: true });
     return { product, specs: (specs ?? []) as SpecInput[] };
@@ -99,6 +101,7 @@ export class ProductsService {
         product_id: product.id,
         parameter: s.parameter,
         spec_range: s.spec_range,
+        parent: s.parent ?? null,
         sort_order: i,
       }));
       const { error: specErr } = await this.supabase.client
@@ -133,6 +136,7 @@ export class ProductsService {
         product_id: id,
         parameter: s.parameter,
         spec_range: s.spec_range,
+        parent: s.parent ?? null,
         sort_order: i,
       }));
       const { error: specErr } = await this.supabase.client

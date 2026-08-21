@@ -33,8 +33,10 @@ export class BatchInitialization implements OnInit {
   async load(): Promise<void> {
     this.loading.set(true);
     try {
-      const all = await this.products.list();
-      this.productList.set(all.filter((p) => p.status === 'active'));
+      // Only offer products the analyst has actually been assigned to work on.
+      const [all, mine] = await Promise.all([this.products.list(), this.batches.listMine()]);
+      const assignedProductIds = new Set(mine.map((b) => b.product_id).filter(Boolean));
+      this.productList.set(all.filter((p) => p.status === 'active' && assignedProductIds.has(p.id)));
     } catch (e) {
       this.error.set(e instanceof Error ? e.message : 'Could not load products.');
     } finally {

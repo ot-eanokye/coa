@@ -47,7 +47,7 @@ export class AddProduct implements OnInit {
     const parameter = this.editParameter().trim();
     const spec_range = this.editRange().trim();
     if (parameter) {
-      this.specs.update((list) => list.map((r, idx) => (idx === i ? { parameter, spec_range } : r)));
+      this.specs.update((list) => list.map((r, idx) => (idx === i ? { ...r, parameter, spec_range } : r)));
     }
     this.editIndex.set(null);
   }

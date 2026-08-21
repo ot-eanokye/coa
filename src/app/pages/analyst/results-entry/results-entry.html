@@ -58,15 +58,24 @@
   <div class="timeline">
     <label class="date-field">
       <span class="date-field__label">DATE ANALYSIS STARTED</span>
-      <div class="date-input">
-        <input type="date" name="started" [ngModel]="startedDate()" (ngModelChange)="startedDate.set($event)" />
+      <div class="date-input date-input--readonly">
+        <span>{{ startedDate() || '—' }}</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="10" rx="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </svg>
       </div>
     </label>
     <label class="date-field">
       <span class="date-field__label">DATE ANALYSIS COMPLETED</span>
-      <div class="date-input">
-        <input type="date" name="completed" [ngModel]="completedDate()"
-          (ngModelChange)="completedDate.set($event)" />
+      <div class="date-input date-input--readonly">
+        <span>{{ completedDate() || 'Set automatically on submission' }}</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="10" rx="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </svg>
       </div>
     </label>
   </div>
@@ -94,24 +103,55 @@
       </thead>
       <tbody>
         @for (row of rows(); track row.id; let i = $index) {
-          <tr>
-            <td class="col-no">{{ i + 1 < 10 ? '0' + (i + 1) : i + 1 }}</td>
-            <td class="strong">{{ row.parameter }}</td>
-            <td class="spec">{{ row.specification }}</td>
-            <td class="col-result">
-              <div class="result-input">
-                <input type="text" [ngModel]="row.result_value" [name]="'res' + i"
-                  (ngModelChange)="setValue(row.id, $event)" placeholder="Enter result" />
-              </div>
-            </td>
-            <td class="col-status">
-              <button type="button" class="status-badge"
-                [class.status-badge--pass]="row.status === 'pass'"
-                [class.status-badge--fail]="row.status === 'fail'"
-                [class.status-badge--pending]="row.status === 'pending'"
-                (click)="cycleStatus(row.id)">{{ row.status | uppercase }}</button>
-            </td>
-          </tr>
+          @if (isGroupHeader(row)) {
+            <tr class="row--group">
+              <td class="col-no">{{ i + 1 < 10 ? '0' + (i + 1) : i + 1 }}</td>
+              <td class="strong">{{ row.parameter }}</td>
+              <td class="spec">{{ row.specification }}</td>
+              <td class="col-result"></td>
+              <td class="col-status"></td>
+            </tr>
+          } @else {
+            <tr [class.row--sub]="row.parent">
+              <td class="col-no">{{ i + 1 < 10 ? '0' + (i + 1) : i + 1 }}</td>
+              <td class="strong">
+                @if (row.parent) {
+                  <span class="sub-mark">└</span>
+                }
+                {{ row.parameter }}
+              </td>
+              <td class="spec">{{ row.specification }}</td>
+              <td class="col-result">
+                <div class="result-input">
+                  <input type="text" [ngModel]="row.result_value" [name]="'res' + i"
+                    (ngModelChange)="setValue(row.id, $event)" placeholder="Enter result" />
+                </div>
+              </td>
+              <td class="col-status">
+                <div class="mark" [class.mark--locked]="!row.result_value.trim()">
+                  <button type="button" class="mark__btn mark__btn--pass"
+                    [class.is-active]="row.status === 'pass'"
+                    [disabled]="!row.result_value.trim()" (click)="setStatus(row.id, 'pass')">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    PASS
+                  </button>
+                  <button type="button" class="mark__btn mark__btn--fail"
+                    [class.is-active]="row.status === 'fail'"
+                    [disabled]="!row.result_value.trim()" (click)="setStatus(row.id, 'fail')">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                    FAIL
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
         } @empty {
           <tr>
             <td colspan="5" class="rtable-empty">
@@ -123,8 +163,7 @@
     </table>
   </div>
 
-  <p class="hint-line">Numeric results are checked against the specification automatically. For text
-    specifications, tap a status badge to set Pass or Fail once a result is entered.</p>
+  <p class="hint-line">Enter each result, then mark it Pass or Fail. Tap the active choice again to clear it.</p>
 
   <!-- Finalize -->
   <div class="finalize">
