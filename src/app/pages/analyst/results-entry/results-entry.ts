@@ -16,7 +16,7 @@ interface EditableResult {
 @Component({
   selector: 'app-results-entry',
   standalone: true,
-  imports: [FormsModule, UpperCasePipe],
+  imports: [FormsModule],
   templateUrl: './results-entry.html',
   styleUrl: './results-entry.scss',
 })
