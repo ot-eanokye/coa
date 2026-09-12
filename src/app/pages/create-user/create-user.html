@@ -6,8 +6,10 @@
   </nav>
 
   <h1 class="page__title">Create New User</h1>
-  <p class="page__subtitle">Provision institutional access and assign a clinical role. The user signs in with the
-    temporary password you set here.</p>
+  <p class="page__subtitle">
+    Provision institutional access and assign a clinical role. The user signs in with the temporary
+    password you set here.
+  </p>
 
   <form class="card" (ngSubmit)="onSubmit()">
     <div class="card__head">
@@ -22,19 +24,35 @@
       <div class="grid">
         <label class="field">
           <span class="field__label">FULL NAME</span>
-          <input type="text" placeholder="e.g. Dr. Kwesi Appiah" name="fullName"
-            [ngModel]="fullName()" (ngModelChange)="fullName.set($event)" />
+          <input
+            type="text"
+            placeholder="e.g. Dr. Kwesi Appiah"
+            name="fullName"
+            [ngModel]="fullName()"
+            (ngModelChange)="fullName.set($event)"
+          />
         </label>
         <label class="field">
           <span class="field__label">EMPLOYEE ID</span>
-          <input type="text" placeholder="e.g. EC-QC-0842" name="employeeId"
-            [ngModel]="employeeId()" (ngModelChange)="employeeId.set($event)" />
+          <input
+            type="text"
+            placeholder="e.g. EC-QC-0842"
+            name="employeeId"
+            [ngModel]="employeeId()"
+            (ngModelChange)="employeeId.set($event)"
+          />
         </label>
 
         <label class="field">
           <span class="field__label">EMAIL ADDRESS</span>
-          <input type="email" placeholder="name@ernestchemists.com" name="email"
-            [ngModel]="email()" (ngModelChange)="email.set($event)" autocomplete="off" />
+          <input
+            type="email"
+            placeholder="name@example.com"
+            name="email"
+            [ngModel]="email()"
+            (ngModelChange)="email.set($event)"
+            autocomplete="off"
+          />
         </label>
         <label class="field">
           <span class="field__label">ROLE</span>
@@ -45,8 +63,16 @@
                 <option [value]="opt.value">{{ opt.label }}</option>
               }
             </select>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <polyline points="6 9 12 15 18 9" />
             </svg>
           </div>
@@ -54,25 +80,52 @@
 
         <label class="field">
           <span class="field__label">DEPARTMENT</span>
-          <input type="text" placeholder="e.g. Quality Control" name="department"
-            [ngModel]="department()" (ngModelChange)="department.set($event)" />
+          <input
+            type="text"
+            placeholder="e.g. Quality Control"
+            name="department"
+            [ngModel]="department()"
+            (ngModelChange)="department.set($event)"
+          />
         </label>
         <label class="field">
           <span class="field__label">PROFESSIONAL TITLE</span>
-          <input type="text" placeholder="e.g. Senior Analyst" name="title"
-            [ngModel]="title()" (ngModelChange)="title.set($event)" />
+          <input
+            type="text"
+            placeholder="e.g. Senior Analyst"
+            name="title"
+            [ngModel]="title()"
+            (ngModelChange)="title.set($event)"
+          />
         </label>
 
         <label class="field field--full">
           <span class="field__label">TEMPORARY PASSWORD</span>
           <div class="pw">
-            <input [type]="showPassword() ? 'text' : 'password'" placeholder="Min. 8 characters"
-              name="password" [ngModel]="password()" (ngModelChange)="password.set($event)"
-              autocomplete="new-password" />
-            <button class="pw__toggle" type="button" (click)="showPassword.set(!showPassword())"
-              [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              placeholder="Min. 8 characters"
+              name="password"
+              [ngModel]="password()"
+              (ngModelChange)="password.set($event)"
+              autocomplete="new-password"
+            />
+            <button
+              class="pw__toggle"
+              type="button"
+              (click)="showPassword.set(!showPassword())"
+              [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" />
                 <circle cx="12" cy="12" r="3" />
               </svg>
@@ -84,7 +137,9 @@
     </div>
 
     <div class="card__foot">
-      <button class="btn btn--ghost" type="button" routerLink="/users" [disabled]="saving()">Cancel</button>
+      <button class="btn btn--ghost" type="button" routerLink="/users" [disabled]="saving()">
+        Cancel
+      </button>
       <button class="btn btn--primary" type="submit" [disabled]="saving()">
         {{ saving() ? 'Creating…' : 'Create User' }}
       </button>

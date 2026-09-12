@@ -115,12 +115,12 @@ create trigger on_auth_user_created
 -- SEED THE FIRST ADMIN (chicken-and-egg: needed before the app can create users)
 -- ----------------------------------------------------------------------------
 -- 1) Supabase Dashboard → Authentication → Users → "Add user":
---       email:    admin@ernestchemists.com   (use your own)
+--       email:    your-admin-email@example.com   (use your own)
 --       password: <choose one>
 --       ✅ Auto Confirm User
 -- 2) Then run the statement below to promote that account to admin:
 --
 --    update public.profiles
 --       set role = 'admin', full_name = 'System Administrator', status = 'active'
---     where email = 'admin@ernestchemists.com';
+--     where email = 'your-admin-email@example.com';
 -- ============================================================================

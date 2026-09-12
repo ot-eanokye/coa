@@ -2,17 +2,33 @@
   <!-- Hero -->
   <div class="hero">
     <h1 class="hero__title">Certificate of Analysis Management System</h1>
-    <p class="hero__subtitle">Quickly access Certificates of Analysis and laboratory documentation. Enter a Batch
-      Number, Product Name, or Analyst ID to begin your search.</p>
+    <p class="hero__subtitle">
+      Quickly access Certificates of Analysis and laboratory documentation. Enter a Batch Number,
+      Product Name, or Analyst ID to begin your search.
+    </p>
     <div class="hero__search">
       <div class="hero__field">
-        <svg class="hero__search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          class="hero__search-icon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <circle cx="11" cy="11" r="8" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
-        <input type="text" placeholder="Search Batch ID or Product Name..." name="q"
-          [ngModel]="query()" (ngModelChange)="query.set($event)" />
+        <input
+          type="text"
+          placeholder="Search Batch ID or Product Name..."
+          name="q"
+          [ngModel]="query()"
+          (ngModelChange)="query.set($event)"
+        />
       </div>
       <button class="btn btn--dark" type="button">Search CoA</button>
     </div>
@@ -20,8 +36,16 @@
 
   <!-- Laboratory Operations -->
   <div class="section-head">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-blue)"
-      stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="var(--color-blue)"
+      stroke-width="1.9"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
       <rect x="3" y="3" width="7" height="7" rx="1" />
       <rect x="14" y="3" width="7" height="7" rx="1" />
       <rect x="14" y="14" width="7" height="7" rx="1" />
@@ -36,23 +60,49 @@
         <span class="op-card__icon">
           @switch (op.icon) {
             @case ('certificate') {
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+                />
                 <rect x="8" y="2" width="8" height="4" rx="1" />
                 <path d="m9 14 2 2 4-4" />
               </svg>
             }
             @case ('approval') {
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <rect x="3" y="4" width="18" height="16" rx="2" />
                 <path d="m8 11 2 2 4-4" />
               </svg>
             }
             @case ('retrieval') {
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <rect x="2" y="4" width="20" height="5" rx="1" />
                 <path d="M4 9v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9" />
                 <line x1="10" y1="13" x2="14" y2="13" />
@@ -69,8 +119,16 @@
   <!-- Recent Activity -->
   <div class="section-head section-head--spread">
     <div class="section-head__left">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-blue)"
-        stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="var(--color-blue)"
+        stroke-width="1.9"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <path d="M3 3v5h5" />
         <path d="M3.05 13A9 9 0 1 0 6 5.3L3 8" />
         <path d="M12 7v5l4 2" />
@@ -100,15 +158,26 @@
             <td class="cell-mono">{{ date(row) }}</td>
             <td class="cell-mono">{{ row.analyst_name || '—' }}</td>
             <td>
-              <span class="badge"
+              <span
+                class="badge"
                 [class.badge--released]="statusTone(row) === 'released'"
                 [class.badge--review]="statusTone(row) === 'review'"
-                [class.badge--oos]="statusTone(row) === 'oos'">{{ stageLabel(row) }}</span>
+                [class.badge--oos]="statusTone(row) === 'oos'"
+                >{{ stageLabel(row) }}</span
+              >
             </td>
             <td>
               <a class="act act--blue" aria-label="View CoA" [routerLink]="['/coa', row.id]">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
                   <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" />
                   <circle cx="12" cy="12" r="3" />
                 </svg>
@@ -128,7 +197,9 @@
 
   <!-- Footer -->
   <footer class="foot">
-    <span class="foot__copy">© 2024 Ernest Chemists Laboratory Information Management System. All rights reserved.</span>
+    <span class="foot__copy"
+      >© 2024 CoA Laboratory Information Management System. All rights reserved.</span
+    >
     <nav class="foot__links">
       <a href="#" (click)="$event.preventDefault()">Privacy Policy</a>
       <a href="#" (click)="$event.preventDefault()">Terms of Service</a>

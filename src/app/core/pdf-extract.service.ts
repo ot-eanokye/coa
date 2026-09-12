@@ -18,7 +18,7 @@ export interface ExtractedProduct {
 
 /**
  * Client-side extraction of product data from an uploaded PDF spec sheet / CoA.
- * pdf.js pulls the text; a heuristic parser tuned to Ernest's CoA layout pulls
+ * pdf.js pulls the text; a heuristic parser tuned to the CoA layout pulls
  * the fields. Extraction is best-effort — the UI lets the admin verify/edit
  * before saving.
  */
@@ -51,7 +51,9 @@ export class PdfExtractService {
       text += this.itemsToLines(content.items) + '\n';
     }
     if (!text.trim()) {
-      throw new Error('No text found in this PDF — it may be a scanned image (OCR not supported yet).');
+      throw new Error(
+        'No text found in this PDF — it may be a scanned image (OCR not supported yet).',
+      );
     }
     return { ...this.parse(text), rawText: text };
   }
@@ -86,7 +88,10 @@ export class PdfExtractService {
   }
 
   private parse(text: string): Omit<ExtractedProduct, 'rawText'> {
-    const lines = text.split('\n').map((l) => l.trim()).filter(Boolean);
+    const lines = text
+      .split('\n')
+      .map((l) => l.trim())
+      .filter(Boolean);
     const joined = lines.join('\n');
     const grab = (re: RegExp) => joined.match(re)?.[1]?.trim() ?? '';
 
@@ -99,7 +104,15 @@ export class PdfExtractService {
     );
     const active_ingredients = lines.find((l) => /^each\b/i.test(l)) ?? '';
 
-    return { name, category, batch_no, mfg_date, exp_date, active_ingredients, specs: this.parseSpecs(lines) };
+    return {
+      name,
+      category,
+      batch_no,
+      mfg_date,
+      exp_date,
+      active_ingredients,
+      specs: this.parseSpecs(lines),
+    };
   }
 
   private normalizeCategory(raw: string): string {
@@ -123,13 +136,18 @@ export class PdfExtractService {
       if (!cleaned || skipRe.test(cleaned)) continue;
       const m = cleaned.match(specRe);
       if (m && m.index !== undefined && m.index >= 2) {
-        const parameter = cleaned.slice(0, m.index).replace(/[\s:.\-]+$/, '').trim();
+        const parameter = cleaned
+          .slice(0, m.index)
+          .replace(/[\s:.\-]+$/, '')
+          .trim();
         const spec_range = cleaned.slice(m.index).trim();
         if (parameter.length >= 2 && parameter.length <= 70) {
           out.push({ parameter, spec_range });
         }
       }
     }
-    return out.filter((s, i) => out.findIndex((x) => x.parameter.toLowerCase() === s.parameter.toLowerCase()) === i);
+    return out.filter(
+      (s, i) => out.findIndex((x) => x.parameter.toLowerCase() === s.parameter.toLowerCase()) === i,
+    );
   }
 }
