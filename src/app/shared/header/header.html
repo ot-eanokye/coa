@@ -1,7 +1,11 @@
 <header class="topbar">
   <nav class="topbar__nav">
     @for (item of navItems(); track item.link) {
-      <a class="topbar__link" [routerLink]="item.link" [class.topbar__link--active]="isActive(item)">
+      <a
+        class="topbar__link"
+        [routerLink]="item.link"
+        [class.topbar__link--active]="isActive(item)"
+      >
         {{ item.label }}
       </a>
     }
@@ -9,9 +13,22 @@
 
   <div class="topbar__right">
     <div class="topbar__notif">
-      <button class="topbar__icon-btn" aria-label="Notifications" type="button" (click)="toggleNotif()">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <button
+        class="topbar__icon-btn"
+        aria-label="Notifications"
+        type="button"
+        (click)="toggleNotif()"
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
           <path d="M13.73 21a2 2 0 0 1-3.46 0" />
         </svg>
@@ -24,22 +41,75 @@
       }
     </div>
 
-    <a class="topbar__icon-btn" aria-label="Settings" routerLink="/settings" title="Settings">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="3" />
-        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-      </svg>
-    </a>
+    <div class="topbar__account">
+      <button
+        class="topbar__user"
+        type="button"
+        (click)="toggleAccountMenu()"
+        [attr.aria-expanded]="accountMenuOpen()"
+        aria-haspopup="menu"
+        title="Account menu"
+      >
+        @if (showMeta()) {
+          <div class="topbar__user-meta">
+            <span class="topbar__user-name">{{ displayName() }}</span>
+            <span class="topbar__user-role">{{ displayRole() }}</span>
+          </div>
+        }
+        <div class="topbar__avatar" aria-hidden="true">{{ displayInitials() }}</div>
+      </button>
 
-    <button class="topbar__user" type="button" (click)="logout()" title="Sign out">
-      @if (showMeta()) {
-        <div class="topbar__user-meta">
-          <span class="topbar__user-name">{{ displayName() }}</span>
-          <span class="topbar__user-role">{{ displayRole() }}</span>
+      @if (accountMenuOpen()) {
+        <div class="account-menu" role="menu">
+          <a
+            class="account-menu__item"
+            routerLink="/settings"
+            role="menuitem"
+            (click)="closeAccountMenu()"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+              />
+            </svg>
+            <span>Settings</span>
+          </a>
+          <button
+            class="account-menu__item account-menu__item--danger"
+            type="button"
+            role="menuitem"
+            (click)="logout()"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M10 17l5-5-5-5" />
+              <path d="M15 12H3" />
+              <path d="M21 19V5a2 2 0 0 0-2-2h-6" />
+            </svg>
+            <span>Logout</span>
+          </button>
         </div>
       }
-      <div class="topbar__avatar" aria-hidden="true">{{ displayInitials() }}</div>
-    </button>
+    </div>
   </div>
 </header>

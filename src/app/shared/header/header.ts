@@ -12,7 +12,11 @@ export interface NavItem {
 }
 
 const ADMIN_NAV: NavItem[] = [
-  { label: 'Dashboard', link: '/dashboard', match: ['/dashboard', '/approvals', '/archived', '/qc-queue'] },
+  {
+    label: 'Dashboard',
+    link: '/dashboard',
+    match: ['/dashboard', '/approvals', '/archived', '/qc-queue'],
+  },
   { label: 'Manage Products', link: '/products', match: ['/products'] },
   { label: 'User Management', link: '/users', match: ['/users', '/update-password', '/settings'] },
 ];
@@ -35,9 +39,18 @@ export class Header {
   readonly showMeta = input<boolean>(true);
 
   readonly notifOpen = signal(false);
+  readonly accountMenuOpen = signal(false);
 
   toggleNotif(): void {
     this.notifOpen.update((v) => !v);
+  }
+
+  toggleAccountMenu(): void {
+    this.accountMenuOpen.update((v) => !v);
+  }
+
+  closeAccountMenu(): void {
+    this.accountMenuOpen.set(false);
   }
 
   /** Prefer the real signed-in profile; fall back to the static inputs. */
@@ -70,6 +83,7 @@ export class Header {
   }
 
   async logout(): Promise<void> {
+    this.closeAccountMenu();
     await this.auth.signOut();
     await this.router.navigateByUrl('/login');
   }
