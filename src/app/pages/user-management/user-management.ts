@@ -2,6 +2,7 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { AuthService } from '../../core/auth.service';
 import { UsersService } from '../../core/users.service';
 import { Profile, ROLE_LABELS, UserRole } from '../../core/models';
 
@@ -21,6 +22,7 @@ const AVATAR_TONES = ['tone-indigo', 'tone-slate', 'tone-blue', 'tone-gray'];
   styleUrl: './user-management.scss',
 })
 export class UserManagement implements OnInit {
+  private readonly auth = inject(AuthService);
   private readonly usersService = inject(UsersService);
   private readonly route = inject(ActivatedRoute);
 
@@ -66,7 +68,9 @@ export class UserManagement implements OnInit {
     this.loading.set(true);
     this.error.set(null);
     try {
-      this.profiles.set(await this.usersService.list());
+      const currentUserId = this.auth.profile()?.id;
+      const profiles = await this.usersService.list();
+      this.profiles.set(profiles.filter((profile) => profile.id !== currentUserId));
     } catch (e) {
       this.error.set(e instanceof Error ? e.message : 'Could not load users.');
     } finally {
