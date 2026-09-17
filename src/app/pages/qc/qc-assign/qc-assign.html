@@ -18,8 +18,16 @@
               <option [value]="c">{{ c }}</option>
             }
           </select>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <polyline points="6 9 12 15 18 9" />
           </svg>
         </div>
@@ -28,14 +36,27 @@
       <label class="field">
         <span class="field__label">Product</span>
         <div class="select">
-          <select name="product" [ngModel]="productId()" (ngModelChange)="productId.set($event)">
+          <select
+            name="product"
+            required
+            [ngModel]="productId()"
+            (ngModelChange)="productId.set($event)"
+          >
             <option value="">{{ loading() ? 'Loading…' : 'Select product…' }}</option>
             @for (p of filteredProducts(); track p.id) {
               <option [value]="p.id">{{ p.name }}</option>
             }
           </select>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <polyline points="6 9 12 15 18 9" />
           </svg>
         </div>
@@ -53,22 +74,42 @@
       <label class="field">
         <span class="field__label">Batch Number</span>
         <div class="input-icon">
-          <input type="text" placeholder="e.g. 0705C" name="batchNo"
-            [ngModel]="batchNo()" (ngModelChange)="batchNo.set($event)" />
+          <input
+            type="text"
+            placeholder="e.g. 0705C"
+            name="batchNo"
+            required
+            pattern="[A-Za-z0-9-]+"
+            [ngModel]="batchNo()"
+            (ngModelChange)="batchNo.set($event)"
+          />
         </div>
       </label>
 
       <label class="field">
         <span class="field__label">Assigned Analyst</span>
         <div class="select">
-          <select name="analyst" [ngModel]="analystId()" (ngModelChange)="analystId.set($event)">
+          <select
+            name="analyst"
+            required
+            [ngModel]="analystId()"
+            (ngModelChange)="analystId.set($event)"
+          >
             <option value="">Select analyst…</option>
             @for (a of analysts(); track a.id) {
               <option [value]="a.id">{{ a.full_name }}</option>
             }
           </select>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <polyline points="6 9 12 15 18 9" />
           </svg>
         </div>
@@ -76,13 +117,23 @@
     </div>
 
     @if (message()) {
-      <div class="assign-msg" [class.assign-msg--err]="messageType() === 'err'">{{ message() }}</div>
+      <div class="assign-msg" [class.assign-msg--err]="messageType() === 'err'">
+        {{ message() }}
+      </div>
     }
 
     <div class="form__actions">
       <button class="btn btn--green" type="button" [disabled]="assigning()" (click)="assign()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path d="M9 11l3 3L22 4" />
           <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
         </svg>
@@ -111,14 +162,18 @@
         @for (row of recent(); track row.id) {
           <tr>
             <td class="cell-muted">{{ date(row) }}</td>
-            <td><span class="cat-pill">{{ (row.category || '—') | uppercase }}</span></td>
+            <td>
+              <span class="cat-pill">{{ row.category || '—' | uppercase }}</span>
+            </td>
             <td class="cell-strong">{{ row.product_name }}</td>
             <td>{{ row.analyst_name || '—' }}</td>
             <td><span class="status">Assigned</span></td>
           </tr>
         } @empty {
           <tr>
-            <td colspan="5" class="assign-empty">{{ loading() ? 'Loading…' : 'No batches yet.' }}</td>
+            <td colspan="5" class="assign-empty">
+              {{ loading() ? 'Loading…' : 'No batches yet.' }}
+            </td>
           </tr>
         }
       </tbody>

@@ -37,7 +37,12 @@ export class ResultsEntry implements OnInit {
 
   /** Names of tests that have sub-tests — these act as group headers, not result rows. */
   readonly groupNames = computed(
-    () => new Set(this.rows().filter((r) => r.parent).map((r) => r.parent as string)),
+    () =>
+      new Set(
+        this.rows()
+          .filter((r) => r.parent)
+          .map((r) => r.parent as string),
+      ),
   );
 
   isGroupHeader(row: EditableResult): boolean {
@@ -124,6 +129,11 @@ export class ResultsEntry implements OnInit {
       return;
     }
     this.error.set(null);
+    const missing = this.rows().some((row) => !this.isGroupHeader(row) && !row.result_value.trim());
+    if (missing) {
+      this.error.set('Enter a result for every test before submitting for review.');
+      return;
+    }
     this.saving.set(true);
     try {
       await this.batches.saveResults(

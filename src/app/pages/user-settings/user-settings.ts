@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
 import { SignaturePad } from '../../shared/signature-pad/signature-pad';
+import { NAME_PATTERN } from '../../core/validation';
 
 @Component({
   selector: 'app-user-settings',
@@ -23,6 +24,7 @@ export class UserSettings {
   readonly title = signal(this.auth.profile()?.title ?? '');
   readonly savingProfile = signal(false);
   readonly profileMessage = signal<string | null>(null);
+  readonly namePattern = NAME_PATTERN.source;
 
   readonly sigValue = signal<string | null>(null);
   readonly savingSig = signal(false);
@@ -35,9 +37,16 @@ export class UserSettings {
       this.profileMessage.set('Full name is required.');
       return;
     }
+    if (!NAME_PATTERN.test(this.fullName().trim())) {
+      this.profileMessage.set('Full name contains invalid characters.');
+      return;
+    }
     this.savingProfile.set(true);
     try {
-      await this.auth.updateProfile({ full_name: this.fullName().trim(), title: this.title().trim() });
+      await this.auth.updateProfile({
+        full_name: this.fullName().trim(),
+        title: this.title().trim(),
+      });
       this.profileMessage.set('Profile updated.');
     } catch (e) {
       this.profileMessage.set(e instanceof Error ? e.message : 'Could not update profile.');
@@ -61,7 +70,9 @@ export class UserSettings {
     this.savingSig.set(true);
     try {
       await this.auth.saveSignature(this.sigValue());
-      this.sigMessage.set('Signature saved. It will be applied automatically at your next sign-off.');
+      this.sigMessage.set(
+        'Signature saved. It will be applied automatically at your next sign-off.',
+      );
     } catch (e) {
       this.sigMessage.set(e instanceof Error ? e.message : 'Could not save the signature.');
     } finally {

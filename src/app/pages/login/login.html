@@ -43,6 +43,8 @@
               placeholder="technician@example.com"
               autocomplete="username"
               name="email"
+              required
+              pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@deblin\.com"
               [ngModel]="email()"
               (ngModelChange)="email.set($event)"
             />

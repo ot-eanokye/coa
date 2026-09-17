@@ -1,7 +1,15 @@
 <section class="page">
   <a class="back-link" [routerLink]="home()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
       <polyline points="15 18 9 12 15 6" />
     </svg>
     Back to dashboard
@@ -10,7 +18,9 @@
   <div class="page__head">
     <div>
       <h1 class="page__title">User Settings</h1>
-      <p class="page__subtitle">Manage your professional profile and laboratory access preferences.</p>
+      <p class="page__subtitle">
+        Manage your professional profile and laboratory access preferences.
+      </p>
     </div>
     <button class="btn btn--logout" type="button" (click)="logout()">Logout</button>
   </div>
@@ -19,14 +29,27 @@
   <div class="card">
     <div class="card__head">
       <div class="card__head-title">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
           <circle cx="12" cy="7" r="4" />
         </svg>
         <h2>Profile Management</h2>
       </div>
-      <button class="btn btn--dark" type="button" [disabled]="savingProfile()" (click)="saveProfile()">
+      <button
+        class="btn btn--dark"
+        type="button"
+        [disabled]="savingProfile()"
+        (click)="saveProfile()"
+      >
         {{ savingProfile() ? 'Saving…' : 'Save Changes' }}
       </button>
     </div>
@@ -34,8 +57,16 @@
     <div class="card__body profile">
       <div class="profile__photo-col">
         <div class="profile__photo" aria-hidden="true">
-          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            width="46"
+            height="46"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
             <circle cx="12" cy="7" r="4" />
           </svg>
@@ -47,7 +78,15 @@
       <div class="profile__fields">
         <label class="field">
           <span class="field__label">FULL NAME</span>
-          <input type="text" name="fullName" [ngModel]="fullName()" (ngModelChange)="fullName.set($event)" />
+          <input
+            type="text"
+            name="fullName"
+            required
+            minlength="2"
+            [pattern]="namePattern"
+            [ngModel]="fullName()"
+            (ngModelChange)="fullName.set($event)"
+          />
         </label>
         <label class="field">
           <span class="field__label">PROFESSIONAL TITLE</span>
@@ -68,8 +107,16 @@
   <div class="card">
     <div class="card__head card__head--plain">
       <div class="card__head-title">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <rect x="3" y="11" width="18" height="11" rx="2" />
           <path d="M7 11V7a5 5 0 0 1 10 0v4" />
         </svg>
@@ -80,8 +127,16 @@
     <div class="card__body security">
       <div class="setting">
         <span class="setting__icon setting__icon--gray">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <circle cx="7.5" cy="15.5" r="4.5" />
             <path d="m10.5 12.5 9-9" />
             <path d="m16 6 3 3" />
@@ -90,15 +145,31 @@
         </span>
         <div class="setting__text">
           <span class="setting__title">Change Password</span>
-          <span class="setting__desc">Last changed 45 days ago. We recommend updating every 90 days.</span>
+          <span class="setting__desc"
+            >Last changed 45 days ago. We recommend updating every 90 days.</span
+          >
         </div>
-        <button class="btn btn--outline" type="button" (click)="router.navigateByUrl('/update-password')">Update</button>
+        <button
+          class="btn btn--outline"
+          type="button"
+          (click)="router.navigateByUrl('/update-password')"
+        >
+          Update
+        </button>
       </div>
 
       <div class="setting">
         <span class="setting__icon setting__icon--blue">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
             <path d="m9 12 2 2 4-4" />
           </svg>
@@ -110,7 +181,9 @@
               {{ currentSignature() ? 'ON FILE' : 'NOT SET' }}
             </span>
           </span>
-          <span class="setting__desc">Applied automatically to certificates when you sign off a batch.</span>
+          <span class="setting__desc"
+            >Applied automatically to certificates when you sign off a batch.</span
+          >
         </div>
       </div>
     </div>
@@ -120,8 +193,16 @@
   <div class="card">
     <div class="card__head card__head--plain">
       <div class="card__head-title">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path d="M12 20h9" />
           <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
         </svg>
@@ -130,19 +211,29 @@
     </div>
 
     <div class="card__body">
-      <p class="sig-intro">Save a signature and the system applies it automatically whenever you sign off a
-        batch. Without one, you'll be asked to sign each time.</p>
+      <p class="sig-intro">
+        Save a signature and the system applies it automatically whenever you sign off a batch.
+        Without one, you'll be asked to sign each time.
+      </p>
 
       @if (currentSignature(); as sig) {
         <div class="sig-current">
           <span class="sig-current__label">CURRENT SIGNATURE</span>
           <img class="sig-current__img" [src]="sig" alt="Your saved signature" />
-          <button class="btn btn--danger" type="button" [disabled]="savingSig()"
-            (click)="removeSignature()">Remove</button>
+          <button
+            class="btn btn--danger"
+            type="button"
+            [disabled]="savingSig()"
+            (click)="removeSignature()"
+          >
+            Remove
+          </button>
         </div>
       }
 
-      <span class="sig-label">{{ currentSignature() ? 'REPLACE SIGNATURE' : 'CREATE SIGNATURE' }}</span>
+      <span class="sig-label">{{
+        currentSignature() ? 'REPLACE SIGNATURE' : 'CREATE SIGNATURE'
+      }}</span>
       <app-signature-pad (changed)="onSigChanged($event)" />
 
       @if (sigMessage()) {
@@ -150,7 +241,12 @@
       }
 
       <div class="sig-actions">
-        <button class="btn btn--dark" type="button" [disabled]="savingSig()" (click)="saveSignature()">
+        <button
+          class="btn btn--dark"
+          type="button"
+          [disabled]="savingSig()"
+          (click)="saveSignature()"
+        >
           {{ savingSig() ? 'Saving…' : 'Save Signature' }}
         </button>
       </div>

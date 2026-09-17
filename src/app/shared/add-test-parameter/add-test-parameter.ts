@@ -37,21 +37,26 @@ export class AddTestParameter {
   }
 
   updateSub(index: number, key: keyof SubTest, value: string): void {
-    this.subTests.update((list) =>
-      list.map((s, i) => (i === index ? { ...s, [key]: value } : s)),
-    );
+    this.subTests.update((list) => list.map((s, i) => (i === index ? { ...s, [key]: value } : s)));
   }
 
   save(): void {
     const rows: ParameterRow[] = [];
     const name = this.testName().trim();
+    if (!name) {
+      return;
+    }
     if (name) {
       rows.push({ parameter: name, spec_range: this.standardRange().trim(), parent: null });
     }
     for (const sub of this.subTests()) {
       if (sub.name.trim()) {
         // Hang the sub-test under the parent test by name.
-        rows.push({ parameter: sub.name.trim(), spec_range: sub.range.trim(), parent: name || null });
+        rows.push({
+          parameter: sub.name.trim(),
+          spec_range: sub.range.trim(),
+          parent: name || null,
+        });
       }
     }
     this.saved.emit(rows);

@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ExtractedSpec, PdfExtractService } from '../../core/pdf-extract.service';
 import { ProductsService } from '../../core/products.service';
+import { isValidDateRange, isMonthYear } from '../../core/validation';
 
 @Component({
   selector: 'app-import-product',
@@ -90,6 +91,21 @@ export class ImportProduct {
     this.error.set(null);
     if (!this.name().trim() || !this.category().trim()) {
       this.error.set('Product name and category are required before saving.');
+      return;
+    }
+    if (
+      (this.mfgDate().trim() && !isMonthYear(this.mfgDate())) ||
+      (this.expDate().trim() && !isMonthYear(this.expDate()))
+    ) {
+      this.error.set('Manufacturing and expiry dates must use MM/YYYY.');
+      return;
+    }
+    if (
+      this.mfgDate().trim() &&
+      this.expDate().trim() &&
+      !isValidDateRange(this.mfgDate(), this.expDate())
+    ) {
+      this.error.set('Expiry date must be the same as or after the manufacturing date.');
       return;
     }
     this.saving.set(true);

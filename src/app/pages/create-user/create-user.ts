@@ -1,8 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { UsersService } from '../../core/users.service';
 import { ROLE_LABELS, ROLE_OPTIONS, UserRole } from '../../core/models';
+import { EMAIL_USERNAME_PATTERN, isDeblinEmail } from '../../core/validation';
 
 @Component({
   selector: 'app-create-user',
@@ -18,7 +19,9 @@ export class CreateUser {
   readonly roleOptions = ROLE_OPTIONS;
 
   readonly fullName = signal('');
-  readonly email = signal('');
+  readonly emailUsername = signal('');
+  readonly email = computed(() => `${this.emailUsername().trim()}@deblin.com`);
+  readonly emailUsernamePattern = EMAIL_USERNAME_PATTERN.source;
   readonly employeeId = signal('');
   readonly role = signal<UserRole | ''>('');
   readonly department = signal('');
@@ -54,8 +57,23 @@ export class CreateUser {
       return;
     }
     this.error.set(null);
-    if (!this.fullName() || !this.email() || !this.role() || !this.password()) {
+    if (
+      !this.fullName().trim() ||
+      !this.emailUsername().trim() ||
+      !this.role() ||
+      !this.password()
+    ) {
       this.error.set('Full name, email, role and temporary password are required.');
+      return;
+    }
+    if (!/^[A-Za-z][A-Za-z .'-]*$/.test(this.fullName().trim())) {
+      this.error.set(
+        'Full name may contain letters, spaces, apostrophes, periods and hyphens only.',
+      );
+      return;
+    }
+    if (!isDeblinEmail(this.email())) {
+      this.error.set('Email must use the @deblin.com domain.');
       return;
     }
     if (this.password().length < 8) {

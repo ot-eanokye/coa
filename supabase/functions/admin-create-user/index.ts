@@ -72,6 +72,12 @@ Deno.serve(async (req: Request) => {
   if (!email || !password || !full_name || !role) {
     return json({ error: 'Full name, email, password and role are required.' }, 400);
   }
+  if (!/^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@deblin\.com$/i.test(email)) {
+    return json({ error: 'Email must use the @deblin.com domain.' }, 400);
+  }
+  if (!/^[A-Za-z][A-Za-z .'-]*$/.test(full_name)) {
+    return json({ error: 'Full name contains invalid characters.' }, 400);
+  }
   if (!ROLES.includes(role)) {
     return json({ error: 'Invalid role.' }, 400);
   }

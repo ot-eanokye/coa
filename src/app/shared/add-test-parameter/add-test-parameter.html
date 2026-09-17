@@ -6,8 +6,16 @@
         <h2>Add Test Parameter</h2>
       </div>
       <button class="modal__close" type="button" aria-label="Close" (click)="close()">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <line x1="18" y1="6" x2="6" y2="18" />
           <line x1="6" y1="6" x2="18" y2="18" />
         </svg>
@@ -18,13 +26,25 @@
       <div class="grid">
         <label class="field">
           <span class="field__label">TEST NAME</span>
-          <input type="text" placeholder="e.g. Assay or pH Balance" name="testName"
-            [ngModel]="testName()" (ngModelChange)="testName.set($event)" />
+          <input
+            type="text"
+            placeholder="e.g. Assay or pH Balance"
+            name="testName"
+            required
+            minlength="2"
+            [ngModel]="testName()"
+            (ngModelChange)="testName.set($event)"
+          />
         </label>
         <label class="field">
           <span class="field__label">STANDARD SPECIFICATION RANGE</span>
-          <input type="text" placeholder="e.g., 5.5 - 7.0" name="standardRange"
-            [ngModel]="standardRange()" (ngModelChange)="standardRange.set($event)" />
+          <input
+            type="text"
+            placeholder="e.g., 5.5 - 7.0"
+            name="standardRange"
+            [ngModel]="standardRange()"
+            (ngModelChange)="standardRange.set($event)"
+          />
         </label>
       </div>
 
@@ -43,23 +63,56 @@
         </div>
         @for (sub of subTests(); track $index) {
           <div class="subs__row">
-            <input type="text" placeholder="Sub-test name..." [name]="'subName' + $index"
-              [ngModel]="sub.name" (ngModelChange)="updateSub($index, 'name', $event)" />
-            <input type="text" placeholder="Range ..." [name]="'subRange' + $index"
-              [ngModel]="sub.range" (ngModelChange)="updateSub($index, 'range', $event)" />
-            <button class="subs__trash" type="button" aria-label="Remove sub-test" (click)="removeSubTest($index)">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <input
+              type="text"
+              placeholder="Sub-test name..."
+              [name]="'subName' + $index"
+              [ngModel]="sub.name"
+              (ngModelChange)="updateSub($index, 'name', $event)"
+            />
+            <input
+              type="text"
+              placeholder="Range ..."
+              [name]="'subRange' + $index"
+              [ngModel]="sub.range"
+              (ngModelChange)="updateSub($index, 'range', $event)"
+            />
+            <button
+              class="subs__trash"
+              type="button"
+              aria-label="Remove sub-test"
+              (click)="removeSubTest($index)"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <polyline points="3 6 5 6 21 6" />
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                <path
+                  d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                />
               </svg>
             </button>
           </div>
         }
 
         <button class="subs__add" type="button" (click)="addSubTest()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <line x1="12" y1="5" x2="12" y2="19" />
             <line x1="5" y1="12" x2="19" y2="12" />
           </svg>
@@ -68,16 +121,27 @@
       </div>
 
       <div class="compliance">
-        <svg class="compliance__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          class="compliance__icon"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <circle cx="12" cy="12" r="10" />
           <line x1="12" y1="16" x2="12" y2="12" />
           <line x1="12" y1="8" x2="12.01" y2="8" />
         </svg>
         <div class="compliance__text">
           <span class="compliance__title">Compliance Requirement</span>
-          <p>All entered ranges must strictly adhere to Pharmacopoeia (BP/USP) standards as per the Certificate of
-            Analysis (CoA) protocol EC-104.</p>
+          <p>
+            All entered ranges must strictly adhere to Pharmacopoeia (BP/USP) standards as per the
+            Certificate of Analysis (CoA) protocol EC-104.
+          </p>
         </div>
       </div>
     </div>
@@ -85,8 +149,16 @@
     <div class="modal__foot">
       <button class="btn btn--ghost" type="button" (click)="close()">CANCEL</button>
       <button class="btn btn--dark" type="button" (click)="save()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
           <polyline points="17 21 17 13 7 13 7 21" />
           <polyline points="7 3 7 8 15 8" />

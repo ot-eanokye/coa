@@ -1,7 +1,15 @@
 <section class="page">
   <button class="back-link" type="button" (click)="back()">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.9"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
       <line x1="19" y1="12" x2="5" y2="12" />
       <polyline points="12 19 5 12 12 5" />
     </svg>
@@ -21,8 +29,16 @@
     <div class="stepper">
       <div class="step">
         <span class="step__circle step__circle--done">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </span>
@@ -47,8 +63,16 @@
 
   <!-- Timeline -->
   <div class="section-title">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
       <circle cx="12" cy="12" r="10" />
       <polyline points="12 6 12 12 16 14" />
     </svg>
@@ -60,8 +84,16 @@
       <span class="date-field__label">DATE ANALYSIS STARTED</span>
       <div class="date-input date-input--readonly">
         <span>{{ startedDate() || '—' }}</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <rect x="3" y="11" width="18" height="10" rx="2" />
           <path d="M7 11V7a5 5 0 0 1 10 0v4" />
         </svg>
@@ -71,8 +103,16 @@
       <span class="date-field__label">DATE ANALYSIS COMPLETED</span>
       <div class="date-input date-input--readonly">
         <span>{{ completedDate() || 'Set automatically on submission' }}</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <rect x="3" y="11" width="18" height="10" rx="2" />
           <path d="M7 11V7a5 5 0 0 1 10 0v4" />
         </svg>
@@ -83,8 +123,16 @@
   <!-- Test results -->
   <div class="card">
     <div class="section-title section-title--pad">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <path d="M9 3h6v2l-1 1v4l5 8a2 2 0 0 1-1.7 3H6.7A2 2 0 0 1 5 18l5-8V6L9 5Z" />
         <line x1="8.5" y1="14" x2="15.5" y2="14" />
       </svg>
@@ -123,26 +171,56 @@
               <td class="spec">{{ row.specification }}</td>
               <td class="col-result">
                 <div class="result-input">
-                  <input type="text" [ngModel]="row.result_value" [name]="'res' + i"
-                    (ngModelChange)="setValue(row.id, $event)" placeholder="Enter result" />
+                  <input
+                    type="text"
+                    required
+                    [ngModel]="row.result_value"
+                    [name]="'res' + i"
+                    (ngModelChange)="setValue(row.id, $event)"
+                    placeholder="Enter result"
+                  />
                 </div>
               </td>
               <td class="col-status">
                 <div class="mark" [class.mark--locked]="!row.result_value.trim()">
-                  <button type="button" class="mark__btn mark__btn--pass"
+                  <button
+                    type="button"
+                    class="mark__btn mark__btn--pass"
                     [class.is-active]="row.status === 'pass'"
-                    [disabled]="!row.result_value.trim()" (click)="setStatus(row.id, 'pass')">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                      stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    [disabled]="!row.result_value.trim()"
+                    (click)="setStatus(row.id, 'pass')"
+                  >
+                    <svg
+                      width="15"
+                      height="15"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.4"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                     PASS
                   </button>
-                  <button type="button" class="mark__btn mark__btn--fail"
+                  <button
+                    type="button"
+                    class="mark__btn mark__btn--fail"
                     [class.is-active]="row.status === 'fail'"
-                    [disabled]="!row.result_value.trim()" (click)="setStatus(row.id, 'fail')">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                      stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    [disabled]="!row.result_value.trim()"
+                    (click)="setStatus(row.id, 'fail')"
+                  >
+                    <svg
+                      width="15"
+                      height="15"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.4"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
                       <line x1="18" y1="6" x2="6" y2="18" />
                       <line x1="6" y1="6" x2="18" y2="18" />
                     </svg>
@@ -163,13 +241,17 @@
     </table>
   </div>
 
-  <p class="hint-line">Enter each result, then mark it Pass or Fail. Tap the active choice again to clear it.</p>
+  <p class="hint-line">
+    Enter each result, then mark it Pass or Fail. Tap the active choice again to clear it.
+  </p>
 
   <!-- Finalize -->
   <div class="finalize">
     <div class="finalize__text">
       <span class="finalize__title">Finalize Entry</span>
-      <span class="finalize__hint">Please ensure all test results are verified before submission.</span>
+      <span class="finalize__hint"
+        >Please ensure all test results are verified before submission.</span
+      >
     </div>
     <div class="finalize__actions">
       <button class="btn btn--ghost" type="button" (click)="saveDraft()" [disabled]="saving()">

@@ -8,8 +8,16 @@
       <span class="breadcrumb__current">File Upload</span>
     </nav>
     <button class="btn btn--outline" type="button" [routerLink]="'/products/new'">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <path d="M12 20h9" />
         <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
       </svg>
@@ -18,8 +26,10 @@
   </div>
 
   <h1 class="page__title">Import Product Documentation</h1>
-  <p class="page__subtitle">Upload a specification sheet or Certificate of Analysis (PDF) to automatically extract
-    the product metadata and chemical parameters. Review and edit before saving.</p>
+  <p class="page__subtitle">
+    Upload a specification sheet or Certificate of Analysis (PDF) to automatically extract the
+    product metadata and chemical parameters. Review and edit before saving.
+  </p>
 
   @if (error()) {
     <div class="banner banner--error">{{ error() }}</div>
@@ -27,11 +37,24 @@
 
   <div class="layout">
     <!-- Dropzone -->
-    <div class="dropzone" [class.dropzone--over]="dragOver()" (dragover)="onDragOver($event)"
-      (dragleave)="onDragLeave()" (drop)="onDrop($event)">
+    <div
+      class="dropzone"
+      [class.dropzone--over]="dragOver()"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave()"
+      (drop)="onDrop($event)"
+    >
       <span class="dropzone__icon">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--color-blue)"
-          stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          width="30"
+          height="30"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="var(--color-blue)"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
           <polyline points="14 2 14 8 20 8" />
           <line x1="12" y1="18" x2="12" y2="12" />
@@ -58,8 +81,16 @@
     <!-- Extracted / editable preview -->
     <div class="preview">
       <div class="preview__head">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-blue)"
-          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="var(--color-blue)"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <line x1="18" y1="20" x2="18" y2="10" />
           <line x1="12" y1="20" x2="12" y2="4" />
           <line x1="6" y1="20" x2="6" y2="14" />
@@ -69,18 +100,34 @@
 
       @if (!hasResult()) {
         <div class="preview__placeholder">
-          {{ extracting() ? 'Extracting…' : 'Upload a PDF to see the extracted product details here. You can edit everything before saving.' }}
+          {{
+            extracting()
+              ? 'Extracting…'
+              : 'Upload a PDF to see the extracted product details here. You can edit everything before saving.'
+          }}
         </div>
       } @else {
         <div class="fields">
           <label class="field field--wide">
             <span class="field__label">PRODUCT NAME</span>
-            <input type="text" name="name" [ngModel]="name()" (ngModelChange)="name.set($event)" />
+            <input
+              type="text"
+              name="name"
+              required
+              minlength="2"
+              [ngModel]="name()"
+              (ngModelChange)="name.set($event)"
+            />
           </label>
           <label class="field">
             <span class="field__label">CATEGORY</span>
             <div class="select">
-              <select name="category" [ngModel]="category()" (ngModelChange)="category.set($event)">
+              <select
+                name="category"
+                required
+                [ngModel]="category()"
+                (ngModelChange)="category.set($event)"
+              >
                 <option value="">Select…</option>
                 @for (c of categories; track c) {
                   <option [value]="c">{{ c }}</option>
@@ -89,28 +136,60 @@
                   <option [value]="category()">{{ category() }}</option>
                 }
               </select>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <polyline points="6 9 12 15 18 9" />
               </svg>
             </div>
           </label>
           <label class="field">
             <span class="field__label">BATCH NO</span>
-            <input type="text" name="batchNo" [ngModel]="batchNo()" (ngModelChange)="batchNo.set($event)" />
+            <input
+              type="text"
+              name="batchNo"
+              pattern="[A-Za-z0-9-]+"
+              [ngModel]="batchNo()"
+              (ngModelChange)="batchNo.set($event)"
+            />
           </label>
           <label class="field">
             <span class="field__label">DATE OF MFG</span>
-            <input type="text" name="mfg" [ngModel]="mfgDate()" (ngModelChange)="mfgDate.set($event)" />
+            <input
+              type="text"
+              name="mfg"
+              pattern="(0[1-9]|1[0-2])/\\d{4}"
+              placeholder="MM/YYYY"
+              [ngModel]="mfgDate()"
+              (ngModelChange)="mfgDate.set($event)"
+            />
           </label>
           <label class="field">
             <span class="field__label">DATE OF EXP</span>
-            <input type="text" name="exp" [ngModel]="expDate()" (ngModelChange)="expDate.set($event)" />
+            <input
+              type="text"
+              name="exp"
+              pattern="(0[1-9]|1[0-2])/\\d{4}"
+              placeholder="MM/YYYY"
+              [ngModel]="expDate()"
+              (ngModelChange)="expDate.set($event)"
+            />
           </label>
           <label class="field field--wide">
             <span class="field__label">ACTIVE INGREDIENTS COMPOSITION</span>
-            <textarea rows="2" name="comp" [ngModel]="composition()"
-              (ngModelChange)="composition.set($event)"></textarea>
+            <textarea
+              rows="2"
+              name="comp"
+              [ngModel]="composition()"
+              (ngModelChange)="composition.set($event)"
+            ></textarea>
           </label>
         </div>
 
@@ -129,14 +208,39 @@
           <tbody>
             @for (row of specs(); track $index) {
               <tr>
-                <td><input type="text" [ngModel]="row.parameter" [name]="'p' + $index"
-                  (ngModelChange)="updateSpec($index, 'parameter', $event)" /></td>
-                <td><input type="text" [ngModel]="row.spec_range" [name]="'s' + $index"
-                  (ngModelChange)="updateSpec($index, 'spec_range', $event)" /></td>
+                <td>
+                  <input
+                    type="text"
+                    [ngModel]="row.parameter"
+                    [name]="'p' + $index"
+                    (ngModelChange)="updateSpec($index, 'parameter', $event)"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    [ngModel]="row.spec_range"
+                    [name]="'s' + $index"
+                    (ngModelChange)="updateSpec($index, 'spec_range', $event)"
+                  />
+                </td>
                 <td class="col-x">
-                  <button class="del" type="button" (click)="removeSpec($index)" aria-label="Remove">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                      stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <button
+                    class="del"
+                    type="button"
+                    (click)="removeSpec($index)"
+                    aria-label="Remove"
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.7"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
                       <polyline points="3 6 5 6 21 6" />
                       <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
                     </svg>
@@ -153,8 +257,16 @@
 
         <div class="preview__foot">
           <button class="verify-save" type="button" [disabled]="saving()" (click)="verifyAndSave()">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
               <polyline points="17 21 17 13 7 13 7 21" />
               <polyline points="7 3 7 8 15 8" />

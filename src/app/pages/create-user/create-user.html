@@ -28,6 +28,9 @@
             type="text"
             placeholder="e.g. Dr. Kwesi Appiah"
             name="fullName"
+            required
+            minlength="2"
+            pattern="[A-Za-z][A-Za-z .'-]*"
             [ngModel]="fullName()"
             (ngModelChange)="fullName.set($event)"
           />
@@ -43,21 +46,26 @@
           />
         </label>
 
-        <label class="field">
+        <label class="field field--email">
           <span class="field__label">EMAIL ADDRESS</span>
-          <input
-            type="email"
-            placeholder="name@example.com"
-            name="email"
-            [ngModel]="email()"
-            (ngModelChange)="email.set($event)"
-            autocomplete="off"
-          />
+          <span class="email-input">
+            <input
+              type="text"
+              placeholder="username"
+              name="emailUsername"
+              [pattern]="emailUsernamePattern"
+              required
+              autocomplete="off"
+              [ngModel]="emailUsername()"
+              (ngModelChange)="emailUsername.set($event)"
+            />
+            <span class="email-input__suffix">@deblin.com</span>
+          </span>
         </label>
         <label class="field">
           <span class="field__label">ROLE</span>
           <div class="select">
-            <select name="role" [ngModel]="role()" (ngModelChange)="onRoleChange($event)">
+            <select name="role" required [ngModel]="role()" (ngModelChange)="onRoleChange($event)">
               <option value="" disabled>Select a role…</option>
               @for (opt of roleOptions; track opt.value) {
                 <option [value]="opt.value">{{ opt.label }}</option>
@@ -106,6 +114,8 @@
               [type]="showPassword() ? 'text' : 'password'"
               placeholder="Min. 8 characters"
               name="password"
+              required
+              minlength="8"
               [ngModel]="password()"
               (ngModelChange)="password.set($event)"
               autocomplete="new-password"
