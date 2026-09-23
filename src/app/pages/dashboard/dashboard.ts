@@ -29,14 +29,31 @@ export class Dashboard implements OnInit {
     const q = this.query().trim().toLowerCase();
     if (!q) return this.activity();
     return this.activity().filter((b) =>
-      [b.batch_no, b.product_name, b.analyst_name].filter(Boolean).some((v) => v!.toLowerCase().includes(q)),
+      [b.batch_no, b.product_name, b.analyst_name]
+        .filter(Boolean)
+        .some((v) => v!.toLowerCase().includes(q)),
     );
   });
 
   readonly operations: Operation[] = [
-    { title: 'Certificate Management', desc: 'Maintain product profiles and specifications.', icon: 'certificate', link: '/products' },
-    { title: 'Approval Queue', desc: 'Review and approve CoA reports for final release.', icon: 'approval', link: '/approvals' },
-    { title: 'Certificate Retrieval', desc: 'Access and retrieve historical certificates across departments.', icon: 'retrieval', link: '/archived' },
+    {
+      title: 'Certificate Management',
+      desc: 'Maintain product profiles and specifications.',
+      icon: 'certificate',
+      link: '/products',
+    },
+    {
+      title: 'Approval Queue',
+      desc: 'Review and approve CoA reports for final release.',
+      icon: 'approval',
+      link: '/approvals',
+    },
+    {
+      title: 'Certificate Retrieval',
+      desc: 'Access and retrieve historical certificates across departments.',
+      icon: 'retrieval',
+      link: '/archived',
+    },
   ];
 
   searchCoa(): void {
@@ -66,6 +83,10 @@ export class Dashboard implements OnInit {
     const d = new Date(b.updated_at);
     return isNaN(d.getTime())
       ? ''
-      : new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(d);
+      : new Intl.DateTimeFormat('en-GB', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+        }).format(d);
   }
 }
