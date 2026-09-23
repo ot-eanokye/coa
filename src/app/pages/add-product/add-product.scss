@@ -344,3 +344,30 @@
     gap: 14px;
   }
 }
+
+@media (max-width: 600px) {
+  .page {
+    padding: 18px 14px 36px;
+  }
+
+  .page__title {
+    font-size: 28px;
+    line-height: 1.2;
+  }
+
+  .section-bar__actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .section-bar__actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .spec-table {
+    display: block;
+    overflow-x: auto;
+    min-width: 620px;
+  }
+}

@@ -338,6 +338,86 @@
   border-color: var(--color-blue-strong);
 }
 
+@media (max-width: 900px) {
+  .page {
+    padding: 28px 20px 40px;
+  }
+
+  .filters__row {
+    flex-wrap: wrap;
+  }
+
+  .filters__field {
+    flex: 1 1 220px;
+  }
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 18px 14px 28px;
+  }
+
+  .page__head {
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+
+  .page__title {
+    font-size: 28px;
+  }
+
+  .page__subtitle {
+    line-height: 1.45;
+  }
+
+  .page__head .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .filters {
+    padding: 18px 14px;
+  }
+
+  .filters__row,
+  .filters__row--dates,
+  .dates {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filters__field {
+    min-width: 0;
+  }
+
+  .date {
+    justify-content: space-between;
+  }
+
+  .date input {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .filters__actions {
+    justify-content: flex-end;
+  }
+
+  .panel {
+    overflow-x: auto;
+  }
+
+  .table {
+    min-width: 760px;
+  }
+
+  .panel__foot {
+    min-width: 760px;
+    padding: 16px 18px;
+  }
+}
+
 .pager__dots {
   color: var(--color-muted);
   padding: 0 2px;

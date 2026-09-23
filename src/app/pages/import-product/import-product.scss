@@ -454,3 +454,29 @@
     gap: 14px;
   }
 }
+
+@media (max-width: 600px) {
+  .page {
+    padding: 18px 14px 36px;
+  }
+
+  .page__title {
+    font-size: 28px;
+    line-height: 1.2;
+  }
+
+  .dropzone {
+    padding: 40px 20px;
+  }
+
+  .spec-table {
+    display: block;
+    overflow-x: auto;
+    min-width: 560px;
+  }
+
+  .verify-save {
+    width: 100%;
+    justify-content: center;
+  }
+}

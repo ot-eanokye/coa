@@ -17,6 +17,13 @@
   align-items: center;
   gap: 34px;
   height: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.topbar__nav::-webkit-scrollbar {
+  display: none;
 }
 
 .topbar__link {
@@ -26,6 +33,7 @@
   height: 100%;
   font-weight: 600;
   font-size: 17px;
+  white-space: nowrap;
   color: var(--color-white);
   transition: color 0.15s ease;
 }
@@ -198,4 +206,52 @@
   font-weight: 600;
   font-size: 14px;
   border: 2px solid rgba(255, 255, 255, 0.85);
+}
+
+@media (max-width: 760px) {
+  .topbar {
+    height: auto;
+    min-height: 58px;
+    padding: 8px 14px;
+    gap: 12px;
+  }
+
+  .topbar__nav {
+    gap: 20px;
+    flex: 1;
+  }
+
+  .topbar__link {
+    font-size: 14px;
+  }
+
+  .topbar__link--active::after {
+    bottom: 3px;
+  }
+
+  .topbar__right {
+    gap: 8px;
+  }
+
+  .topbar__user-meta {
+    display: none;
+  }
+
+  .topbar__avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 13px;
+  }
+
+  .notif-panel {
+    position: fixed;
+    top: 64px;
+    left: 14px;
+    right: 14px;
+    width: auto;
+  }
+
+  .account-menu {
+    right: 0;
+  }
 }

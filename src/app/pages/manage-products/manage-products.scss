@@ -378,3 +378,47 @@
     flex-wrap: wrap;
   }
 }
+
+@media (max-width: 600px) {
+  .page {
+    padding: 18px 14px 30px;
+  }
+
+  .page__head {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .page__head .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .page__title {
+    font-size: 28px;
+  }
+
+  .search {
+    max-width: none;
+  }
+
+  .filterbar {
+    padding: 10px;
+  }
+
+  .sort {
+    justify-content: space-between;
+  }
+
+  .panel {
+    overflow-x: auto;
+  }
+
+  .table {
+    min-width: 760px;
+  }
+
+  .panel__foot {
+    min-width: 760px;
+  }
+}

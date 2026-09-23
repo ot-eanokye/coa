@@ -294,3 +294,47 @@
     gap: 16px;
   }
 }
+
+@media (max-width: 600px) {
+  .login__grid {
+    padding: 12px 14px 0;
+  }
+
+  .login__panel {
+    padding: 28px 8px 20px;
+  }
+
+  .auth__logo {
+    margin-bottom: 24px;
+  }
+
+  .auth__logo-img {
+    max-width: 140px;
+  }
+
+  .auth__title {
+    font-size: 25px;
+    line-height: 1.2;
+  }
+
+  .auth__subtitle {
+    margin-bottom: 28px;
+    font-size: 15px;
+  }
+
+  .login__footer {
+    padding: 20px 18px;
+    gap: 14px;
+  }
+
+  .login__footer-left,
+  .login__footer-links {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .login__footer-left {
+    font-size: 12px;
+  }
+}
