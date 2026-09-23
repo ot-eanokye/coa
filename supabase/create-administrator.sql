@@ -1,9 +1,8 @@
--- Create or promote an administrator for the CoA application.
+-- Create or promote an administrator for the Certificate Of Analysis Management System.
 -- Run this in the Supabase SQL Editor as a database owner/admin.
 --
 -- IMPORTANT:
--- 1. First create the user in Supabase Dashboard -> Authentication -> Users
---    with an @deblin.com email address.
+-- 1. First create the user in Supabase Dashboard -> Authentication -> Users.
 -- 2. Enable "Auto Confirm User" if the administrator should sign in immediately.
 -- 3. Replace every value marked REPLACE below before running this script.
 -- 4. This script does not set or change the user's password.
@@ -12,7 +11,7 @@ begin;
 
 do $$
 declare
-  admin_email text := 'REPLACE_WITH_ADMIN_USERNAME@deblin.com';
+  admin_email text := 'REPLACE_WITH_ADMIN_EMAIL';
   admin_name text := 'REPLACE_WITH_ADMIN_FULL_NAME';
   admin_department text := 'REPLACE_WITH_DEPARTMENT'; -- Example: Quality Control
   admin_title text := 'REPLACE_WITH_JOB_TITLE';       -- Example: Laboratory Administrator
@@ -28,8 +27,8 @@ begin
     raise exception 'Replace all REPLACE_* values before running this script.';
   end if;
 
-  if admin_email !~* '^[a-z0-9.!#$%&''*+/=?^_`{|}~-]+@deblin\.com$' then
-    raise exception 'Administrator email must use the @deblin.com domain.';
+  if admin_email !~* '^[a-z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$' then
+    raise exception 'Administrator email must be a valid email address.';
   end if;
 
   -- The account must already exist in Supabase Authentication.
@@ -102,4 +101,4 @@ commit;
 -- Verify the administrator profile that was created or updated.
 select id, email, full_name, role, department, title, status
   from public.profiles
- where lower(email) = lower('REPLACE_WITH_ADMIN_USERNAME@deblin.com');
+ where lower(email) = lower('REPLACE_WITH_ADMIN_EMAIL');

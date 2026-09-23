@@ -13,10 +13,14 @@
     <div class="login__panel">
       <form class="auth" (ngSubmit)="onSubmit()">
         <div class="auth__logo">
-          <img class="auth__logo-img" src="/assets/logos/coa_logo.jpeg" alt="CoA MS" />
+          <img
+            class="auth__logo-img"
+            src="/assets/logos/COALOGO.jpg"
+            alt="Certificate Of Analysis Management System"
+          />
         </div>
 
-        <h1 class="auth__title">Welcome back to CoA MS</h1>
+        <h1 class="auth__title">Welcome back to Certificate Of Analysis Management System</h1>
         <p class="auth__subtitle">
           Please authenticate to access the laboratory information management system.
         </p>
@@ -44,7 +48,6 @@
               autocomplete="username"
               name="email"
               required
-              pattern="[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@deblin\.com"
               [ngModel]="email()"
               (ngModelChange)="email.set($event)"
             />
@@ -145,8 +148,10 @@
 
   <footer class="login__footer">
     <div class="login__footer-left">
-      <span class="login__footer-brand">CoA MS</span>
-      <span class="login__footer-copy">© 2024 CoA MS. All rights reserved.</span>
+      <span class="login__footer-brand">Certificate Of Analysis Management System</span>
+      <span class="login__footer-copy"
+        >© 2024 Certificate Of Analysis Management System. All rights reserved.</span
+      >
     </div>
   </footer>
 </div>

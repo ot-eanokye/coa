@@ -50,16 +50,14 @@
           <span class="field__label">EMAIL ADDRESS</span>
           <span class="email-input">
             <input
-              type="text"
-              placeholder="username"
-              name="emailUsername"
-              [pattern]="emailUsernamePattern"
+              type="email"
+              placeholder="technician@example.com"
+              name="email"
               required
               autocomplete="off"
-              [ngModel]="emailUsername()"
-              (ngModelChange)="emailUsername.set($event)"
+              [ngModel]="email()"
+              (ngModelChange)="email.set($event)"
             />
-            <span class="email-input__suffix">@deblin.com</span>
           </span>
         </label>
         <label class="field">

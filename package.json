@@ -1,5 +1,5 @@
 {
-  "name": "coa",
+  "name": "certificate-of-analysis-management-system",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -32,6 +32,7 @@
     "pdfjs-dist": "^6.2.108",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {

@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
-import { isDeblinEmail } from '../../core/validation';
+import { isValidEmail } from '../../core/validation';
 
 @Component({
   selector: 'app-login',
@@ -34,8 +34,8 @@ export class Login {
       this.error.set('Please enter your email and password.');
       return;
     }
-    if (!isDeblinEmail(this.email())) {
-      this.error.set('Please use your @deblin.com email address.');
+    if (!isValidEmail(this.email())) {
+      this.error.set('Please enter a valid email address.');
       return;
     }
     this.loading.set(true);

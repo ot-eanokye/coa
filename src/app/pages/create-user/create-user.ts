@@ -1,9 +1,9 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { UsersService } from '../../core/users.service';
 import { ROLE_LABELS, ROLE_OPTIONS, UserRole } from '../../core/models';
-import { EMAIL_USERNAME_PATTERN, isDeblinEmail } from '../../core/validation';
+import { isValidEmail } from '../../core/validation';
 
 @Component({
   selector: 'app-create-user',
@@ -19,9 +19,7 @@ export class CreateUser {
   readonly roleOptions = ROLE_OPTIONS;
 
   readonly fullName = signal('');
-  readonly emailUsername = signal('');
-  readonly email = computed(() => `${this.emailUsername().trim()}@deblin.com`);
-  readonly emailUsernamePattern = EMAIL_USERNAME_PATTERN.source;
+  readonly email = signal('');
   readonly employeeId = signal('');
   readonly role = signal<UserRole | ''>('');
   readonly department = signal('');
@@ -57,12 +55,7 @@ export class CreateUser {
       return;
     }
     this.error.set(null);
-    if (
-      !this.fullName().trim() ||
-      !this.emailUsername().trim() ||
-      !this.role() ||
-      !this.password()
-    ) {
+    if (!this.fullName().trim() || !this.email().trim() || !this.role() || !this.password()) {
       this.error.set('Full name, email, role and temporary password are required.');
       return;
     }
@@ -72,8 +65,8 @@ export class CreateUser {
       );
       return;
     }
-    if (!isDeblinEmail(this.email())) {
-      this.error.set('Email must use the @deblin.com domain.');
+    if (!isValidEmail(this.email())) {
+      this.error.set('Please enter a valid email address.');
       return;
     }
     if (this.password().length < 8) {

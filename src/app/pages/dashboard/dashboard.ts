@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Batch, BatchService, STAGE_LABEL } from '../../core/batch.service';
 
 interface Operation {
@@ -19,6 +19,7 @@ interface Operation {
 })
 export class Dashboard implements OnInit {
   private readonly batches = inject(BatchService);
+  private readonly router = inject(Router);
 
   readonly activity = signal<Batch[]>([]);
   readonly loading = signal(true);
@@ -37,6 +38,11 @@ export class Dashboard implements OnInit {
     { title: 'Approval Queue', desc: 'Review and approve CoA reports for final release.', icon: 'approval', link: '/approvals' },
     { title: 'Certificate Retrieval', desc: 'Access and retrieve historical certificates across departments.', icon: 'retrieval', link: '/archived' },
   ];
+
+  searchCoa(): void {
+    const query = this.query().trim();
+    void this.router.navigate(['/archived'], query ? { queryParams: { q: query } } : {});
+  }
 
   ngOnInit(): void {
     this.batches

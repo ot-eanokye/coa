@@ -1,7 +1,7 @@
 <section class="page">
   <!-- Hero -->
   <div class="hero">
-    <h1 class="hero__title">Certificate of Analysis Management System</h1>
+    <h1 class="hero__title">Certificate Of Analysis Management System</h1>
     <p class="hero__subtitle">
       Quickly access Certificates of Analysis and laboratory documentation. Enter a Batch Number,
       Product Name, or Analyst ID to begin your search.
@@ -28,9 +28,10 @@
           name="q"
           [ngModel]="query()"
           (ngModelChange)="query.set($event)"
+          (keyup.enter)="searchCoa()"
         />
       </div>
-      <button class="btn btn--dark" type="button">Search CoA</button>
+      <button class="btn btn--dark" type="button" (click)="searchCoa()">Search CoA</button>
     </div>
   </div>
 

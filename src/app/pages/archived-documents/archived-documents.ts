@@ -1,6 +1,7 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import * as XLSX from 'xlsx';
 import { Batch, BatchService } from '../../core/batch.service';
 
 @Component({
@@ -12,6 +13,7 @@ import { Batch, BatchService } from '../../core/batch.service';
 })
 export class ArchivedDocuments implements OnInit {
   private readonly batches = inject(BatchService);
+  private readonly route = inject(ActivatedRoute);
 
   readonly all = signal<Batch[]>([]);
   readonly loading = signal(true);
@@ -22,7 +24,13 @@ export class ArchivedDocuments implements OnInit {
   readonly dateFrom = signal('');
   readonly dateTo = signal('');
 
-  readonly categories = computed(() => [...new Set(this.all().map((b) => b.category).filter(Boolean))]);
+  readonly categories = computed(() => [
+    ...new Set(
+      this.all()
+        .map((b) => b.category)
+        .filter(Boolean),
+    ),
+  ]);
   readonly rows = computed(() => {
     const q = this.query().trim().toLowerCase();
     const c = this.category();
@@ -31,7 +39,10 @@ export class ArchivedDocuments implements OnInit {
     const to = this.dateTo();
     return this.all().filter((b) => {
       const qOk =
-        !q || [b.batch_no, b.product_name, b.category].filter(Boolean).some((v) => v!.toLowerCase().includes(q));
+        !q ||
+        [b.batch_no, b.product_name, b.category]
+          .filter(Boolean)
+          .some((v) => v!.toLowerCase().includes(q));
       const cOk = !c || b.category === c;
       const sOk = !s || (s === 'Rejected' ? this.isRejected(b) : !this.isRejected(b));
       const date = this.releaseDate(b);
@@ -41,29 +52,34 @@ export class ArchivedDocuments implements OnInit {
     });
   });
 
-  exportCsv(): void {
-    const header = ['Batch Number', 'Product Name', 'MFG Date', 'EXP Date', 'Release Date', 'Status'];
-    const esc = (v: string) => `"${(v ?? '').replace(/"/g, '""')}"`;
-    const lines = this.rows().map((b) =>
-      [
-        b.batch_no,
-        b.product_name,
-        b.mfg_date ?? '',
-        b.exp_date ?? '',
-        this.releaseDate(b),
-        this.isRejected(b) ? 'REJECTED' : 'RELEASED',
-      ]
-        .map((v) => esc(String(v)))
-        .join(','),
+  exportExcel(): void {
+    const records = this.rows();
+    if (!records.length) {
+      return;
+    }
+
+    const worksheet = XLSX.utils.json_to_sheet(
+      records.map((b) => ({
+        'Batch Number': b.batch_no,
+        'Product Name': b.product_name,
+        'MFG Date': b.mfg_date ?? '',
+        'EXP Date': b.exp_date ?? '',
+        'Release Date': this.releaseDate(b),
+        Status: this.isRejected(b) ? 'REJECTED' : 'RELEASED',
+      })),
     );
-    const csv = [header.map(esc).join(','), ...lines].join('\r\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `coa-records-${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+    worksheet['!cols'] = [
+      { wch: 18 },
+      { wch: 28 },
+      { wch: 14 },
+      { wch: 14 },
+      { wch: 16 },
+      { wch: 14 },
+    ];
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Archived Records');
+    XLSX.writeFile(workbook, `coa-records-${new Date().toISOString().slice(0, 10)}.xlsx`);
   }
 
   clearFilters(): void {
@@ -75,6 +91,7 @@ export class ArchivedDocuments implements OnInit {
   }
 
   ngOnInit(): void {
+    this.query.set(this.route.snapshot.queryParamMap.get('q') ?? '');
     this.load();
   }
 

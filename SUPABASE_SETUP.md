@@ -1,4 +1,4 @@
-# Supabase Setup — CoA Management System
+# Supabase Setup — Certificate Of Analysis Management System
 
 Follow these once. After step 2 the app boots against your project; after step 4 you can log in; after step 5 the admin can create users in-app.
 
